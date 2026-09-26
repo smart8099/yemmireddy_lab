@@ -1,0 +1,74 @@
+# Shrinks oversized photos added in a push (for example, full-resolution phone
+# photos uploaded in the admin panel) and commits the smaller versions back,
+# so the repository doesn't grow unnecessarily over the years.
+#
+# The commit it makes uses GITHUB_TOKEN, which by design does not trigger other
+# workflows — so there is no loop and no extra deploy. (The deploy for the
+# original push already produced optimised images for visitors.)
+name: Compress uploaded images
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'src/assets/images/**'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: compress-images
+  cancel-in-progress: false
+
+jobs:
+  compress:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Find images added or changed in this push
+        id: changed
+        run: |
+          BEFORE="${{ github.event.before }}"
+          if [ -z "$BEFORE" ] || [ "$BEFORE" = "0000000000000000000000000000000000000000" ]; then
+            echo "First push to the branch; nothing to compare against."
+            echo "files=" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          FILES=$(git diff --name-only --diff-filter=AM "$BEFORE" "${{ github.sha }}" -- src/assets/images \
+            | grep -Ei '\.(jpe?g|png|webp)$' | tr '\n' ' ' || true)
+          echo "Changed images: ${FILES:-none}"
+          echo "files=$FILES" >> "$GITHUB_OUTPUT"
+
+      - uses: actions/setup-node@v4
+        if: steps.changed.outputs.files != ''
+        with:
+          node-version: 22
+          cache: npm
+
+      - if: steps.changed.outputs.files != ''
+        run: npm ci
+
+      - name: Compress
+        if: steps.changed.outputs.files != ''
+        run: node scripts/compress-images.mjs ${{ steps.changed.outputs.files }}
+
+      - name: Commit smaller images
+        if: steps.changed.outputs.files != ''
+        run: |
+          if git diff --quiet -- src/assets/images; then
+            echo "All images were already a reasonable size."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add src/assets/images
+          git commit -m "Compress uploaded images"
+          # An editor may have saved again meanwhile; rebase and retry.
+          for i in 1 2 3; do
+            git pull --rebase origin main && git push origin HEAD:main && exit 0
+            sleep 5
+          done
+          exit 1

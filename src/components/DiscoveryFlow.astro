@@ -1,0 +1,312 @@
+---
+/**
+ * "From Discovery to Impact" graphic, drawn with HTML/CSS/SVG so it stays sharp
+ * and stacks on phones. Text comes from src/content/pages/home.yml (discovery).
+ * The "Explore the lab" row links to the site's real pages.
+ */
+import type { ImageMetadata } from 'astro';
+import OriginalGraphic from './OriginalGraphic.astro';
+import { icons } from '../lib/icons';
+import { nav, url } from '../lib/site';
+
+interface Props {
+  discovery: {
+    eyebrow?: string;
+    title: string;
+    tagline?: string;
+    stages: { name: string; icon: string; points: string[] }[];
+    explore_label?: string;
+    original_image?: { image: ImageMetadata; alt: string };
+  };
+}
+const { discovery: d } = Astro.props;
+
+const tones: Record<string, string> = {
+  understand: '#0e5a54',
+  control: '#b04a12',
+  inform: '#1f5696',
+  empower: '#5446a8',
+  impact: '#3b7527',
+};
+const explore = nav.slice(1).map((item) => ({ ...item, icon: item.href.replace(/\/$/, '') }));
+---
+
+<figure class="df" aria-labelledby="df-title">
+  <figcaption class="df-head">
+    {d.eyebrow && <span class="df-eyebrow">{d.eyebrow}</span>}
+    <h2 id="df-title">{d.title}</h2>
+    {d.tagline && <p>{d.tagline}</p>}
+  </figcaption>
+
+  <ol class="df-stages">
+    {
+      d.stages.map((s) => (
+        <li class="df-stage" style={`--tone: ${tones[s.icon] ?? tones.understand}`}>
+          <span class="df-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <path d={icons[s.icon] ?? icons.understand} />
+            </svg>
+          </span>
+          <div class="df-text">
+            <h3>{s.name}</h3>
+            <ul>{s.points.map((p) => <li>{p}</li>)}</ul>
+          </div>
+        </li>
+      ))
+    }
+  </ol>
+
+  {
+    d.explore_label && (
+      <nav class="df-explore" aria-label={d.explore_label}>
+        <p class="df-explore-label">{d.explore_label}</p>
+        <ul>
+          {explore.map((item) => (
+            <li>
+              <a href={url(item.href)}>
+                <svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d={icons[item.icon] ?? icons.research} />
+                </svg>
+                <span>{item.label}</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+    )
+  }
+
+  {d.original_image && <OriginalGraphic photo={d.original_image} />}
+</figure>
+
+<style>
+  .df {
+    margin: 0;
+    padding: clamp(1.25rem, 0.5rem + 3vw, 3rem);
+    background:
+      radial-gradient(40rem 16rem at 0% 0%, rgb(14 90 84 / 0.07), transparent 70%),
+      radial-gradient(40rem 16rem at 100% 100%, rgb(59 117 39 / 0.07), transparent 70%),
+      var(--color-surface);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+  }
+
+  .df-head {
+    text-align: center;
+    margin-bottom: var(--space-xl);
+  }
+
+  .df-eyebrow {
+    display: block;
+    font-size: var(--step--1);
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--color-primary);
+    margin-bottom: 0.3rem;
+  }
+
+  .df-head h2 {
+    font-size: var(--step-3);
+    margin-bottom: 0.3rem;
+  }
+
+  .df-head p {
+    color: var(--color-muted);
+    font-size: var(--step-1);
+    margin: 0;
+  }
+
+  /* Phones: vertical flow with a connecting line */
+  .df-stages {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: var(--space-l);
+    position: relative;
+  }
+
+  .df-stages::before {
+    content: '';
+    position: absolute;
+    left: 2.25rem;
+    top: 2rem;
+    bottom: 2rem;
+    width: 2px;
+    background: repeating-linear-gradient(to bottom, #b9c9c6 0 6px, transparent 6px 11px);
+  }
+
+  .df-stage {
+    position: relative;
+    display: grid;
+    grid-template-columns: 4.5rem 1fr;
+    gap: var(--space-m);
+    align-items: center;
+  }
+
+  .df-icon {
+    display: grid;
+    place-items: center;
+    width: 4.5rem;
+    height: 4.5rem;
+    border-radius: 50%;
+    background: var(--tone);
+    color: #fff;
+    box-shadow: 0 0 0 5px var(--color-surface), 0 0 0 7px color-mix(in srgb, var(--tone) 25%, transparent), var(--shadow);
+    position: relative;
+    z-index: 1;
+  }
+
+  .df-icon svg {
+    width: 2.1rem;
+    height: 2.1rem;
+  }
+
+  .df-text h3 {
+    font-family: var(--font-body);
+    font-size: var(--step-0);
+    font-weight: 750;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--tone);
+    margin-bottom: 0.3rem;
+  }
+
+  .df-text ul {
+    margin: 0;
+    padding-left: 1rem;
+    font-size: var(--step--1);
+    color: var(--color-text);
+  }
+
+  .df-text li {
+    margin-bottom: 0.15rem;
+  }
+
+  /* Tablets: two-column grid of stages */
+  @media (min-width: 640px) and (max-width: 1099px) {
+    .df-stages {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: var(--space-l) var(--space-xl);
+    }
+
+    .df-stages::before {
+      display: none;
+    }
+  }
+
+  /* Desktop: horizontal flow with arrows between stages */
+  @media (min-width: 1100px) {
+    .df-stages {
+      grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
+      gap: 0;
+    }
+
+    .df-stages::before {
+      left: 10%;
+      right: 10%;
+      top: 3.25rem;
+      bottom: auto;
+      width: auto;
+      height: 2px;
+      background: repeating-linear-gradient(to right, #b9c9c6 0 6px, transparent 6px 11px);
+    }
+
+    .df-stage {
+      grid-template-columns: 1fr;
+      justify-items: center;
+      align-content: start;
+      text-align: center;
+      padding: 0 var(--space-s);
+    }
+
+    .df-stage + .df-stage {
+      border-left: 1px solid var(--color-line);
+    }
+
+    .df-stage + .df-stage::before {
+      content: '';
+      position: absolute;
+      left: -0.55rem;
+      top: 2.7rem;
+      width: 1.1rem;
+      height: 1.1rem;
+      background: var(--color-surface);
+      border-top: 2px solid #8fa7a3;
+      border-right: 2px solid #8fa7a3;
+      transform: rotate(45deg);
+      z-index: 1;
+    }
+
+    .df-icon {
+      width: 6.5rem;
+      height: 6.5rem;
+    }
+
+    .df-icon svg {
+      width: 3rem;
+      height: 3rem;
+    }
+
+    .df-text h3 {
+      padding-bottom: 0.5rem;
+      margin-bottom: 0.6rem;
+      border-bottom: 2px solid color-mix(in srgb, var(--tone) 35%, transparent);
+    }
+
+    .df-text ul {
+      list-style: none;
+      padding: 0;
+    }
+  }
+
+  /* Explore the lab: real links to each page */
+  .df-explore {
+    margin-top: var(--space-xl);
+    padding-top: var(--space-l);
+    border-top: 1px solid var(--color-line);
+  }
+
+  .df-explore-label {
+    text-align: center;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    font-size: var(--step--1);
+    color: var(--color-primary-strong);
+    margin-bottom: var(--space-m);
+  }
+
+  .df-explore ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(6rem, 1fr));
+    gap: var(--space-xs);
+  }
+
+  .df-explore a {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.4rem;
+    padding: var(--space-s) var(--space-xs);
+    border-radius: var(--radius-s);
+    text-decoration: none;
+    color: var(--color-primary-strong);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-align: center;
+    transition: background 0.2s, color 0.2s;
+  }
+
+  .df-explore a:hover {
+    background: var(--color-primary-soft);
+    color: var(--color-primary);
+  }
+</style>

@@ -1,0 +1,328 @@
+---
+import { Image } from 'astro:assets';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Carousel from '../components/Carousel.astro';
+import DiscoveryFlow from '../components/DiscoveryFlow.astro';
+import NewsCard from '../components/NewsCard.astro';
+import Paragraphs from '../components/Paragraphs.astro';
+import { getPage, getPublishedNews, getSettings, mailto, url } from '../lib/site';
+
+const settings = await getSettings();
+const home = await getPage('home');
+const research = await getPage('research');
+const news = (await getPublishedNews()).slice(0, 3);
+
+const jsonLd = {
+  '@type': 'ResearchOrganization',
+  name: settings.name,
+  description: settings.description,
+  url: new URL(url(), Astro.site).href,
+  email: settings.email,
+  telephone: settings.phone,
+  address: { '@type': 'PostalAddress', streetAddress: settings.address, addressCountry: 'US' },
+  parentOrganization: { '@type': 'CollegeOrUniversity', name: settings.university_name, url: settings.university_url },
+  founder: { '@type': 'Person', name: settings.pi_name, jobTitle: settings.pi_title },
+};
+---
+
+<BaseLayout title={home.seo_title || undefined} description={home.seo_description || undefined} jsonLd={jsonLd}>
+  <section class="hero">
+    <div class="hero-media">
+      <Carousel slides={home.carousel} />
+    </div>
+    <div class="hero-text">
+      <span class="eyebrow">{settings.university_name}</span>
+      <h1>{home.hero_title}</h1>
+      <p class="hero-sub">{home.hero_subtitle}</p>
+      <div class="hero-actions">
+        <a class="btn" href={url('research/')}>Explore our research</a>
+        <a class="btn btn--outline" href={url('people/')}>Meet the team</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container about">
+      <div class="about-text">
+        <span class="eyebrow">About the lab</span>
+        <h2>Food safety science, from the field to the table</h2>
+        <Paragraphs text={home.intro} />
+      </div>
+      <aside class="mission" aria-labelledby="mission">
+        <h2 id="mission">{home.mission_title}</h2>
+        <ul>
+          {home.mission.split(/(?<=\.)\s+/).filter(Boolean).map((line) => <li>{line}</li>)}
+        </ul>
+      </aside>
+    </div>
+  </section>
+
+  {
+    research.pillars.length > 0 && (
+      <section class="section section--tint" aria-labelledby="pillars">
+        <div class="container">
+          <div class="section-head section-head--center">
+            <span class="eyebrow">Research</span>
+            <h2 id="pillars">{research.directions ?? 'Our research'}</h2>
+          </div>
+          <div class="grid grid--3">
+            {research.pillars.map((p, i) => (
+              <a class="pillar" href={url(`research/#pillar-${i + 1}`)}>
+                {p.photos[0] && <Image src={p.photos[0].image} alt="" widths={[400, 700]} sizes="(min-width: 900px) 33vw, 92vw" />}
+                <div class="pillar-body">
+                  <span class="pillar-label">{p.label}</span>
+                  <h3>{p.title}</h3>
+                  <p>{p.summary}</p>
+                  <span class="pillar-more">Learn more →</span>
+                </div>
+              </a>
+            ))}
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  {
+    home.discovery && (
+      <section class="section">
+        <div class="container">
+          <DiscoveryFlow discovery={home.discovery} />
+        </div>
+      </section>
+    )
+  }
+
+  {
+    news.length > 0 && (
+      <section class="section section--tint" aria-labelledby="news">
+        <div class="container">
+          <div class="section-row">
+            <div>
+              <span class="eyebrow">Latest</span>
+              <h2 id="news">News</h2>
+            </div>
+            <a href={url('news/')} class="btn btn--outline">All news</a>
+          </div>
+          <div class="grid grid--3">{news.map((post) => <NewsCard post={post} />)}</div>
+        </div>
+      </section>
+    )
+  }
+
+  {
+    home.join_title && (
+      <section class="section section--dark join">
+        <div class="container join-inner">
+          <div>
+            <h2>{home.join_title}</h2>
+            {home.join_text && <p>{home.join_text}</p>}
+          </div>
+          <div class="join-actions">
+            <a class="btn" href={mailto(settings.email)}>Email the lab</a>
+            <a class="btn btn--ghost" href={url('contact/')}>Contact details</a>
+          </div>
+        </div>
+      </section>
+    )
+  }
+</BaseLayout>
+
+<style>
+  .hero {
+    display: grid;
+    background: var(--color-primary-soft);
+  }
+
+  .hero-media {
+    height: clamp(260px, 62vw, 440px);
+    min-height: 260px;
+  }
+
+  .hero-text {
+    padding: var(--space-xl) var(--gutter) var(--space-2xl);
+  }
+
+  .hero h1 {
+    font-size: var(--step-4);
+  }
+
+  .hero-sub {
+    font-family: var(--font-display);
+    font-size: var(--step-2);
+    line-height: 1.3;
+    color: var(--color-primary);
+    max-width: 24ch;
+  }
+
+  .hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-s);
+    margin-top: var(--space-l);
+  }
+
+  @media (min-width: 960px) {
+    .hero {
+      grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+      min-height: min(78vh, 720px);
+    }
+
+    .hero-media {
+      order: 2;
+      height: auto;
+      min-height: 100%;
+    }
+
+    .hero-text {
+      align-self: center;
+      padding: var(--space-2xl) var(--space-xl) var(--space-2xl) max(var(--gutter), calc((100vw - var(--container)) / 2));
+    }
+  }
+
+  .about {
+    display: grid;
+    gap: var(--space-xl);
+  }
+
+  @media (min-width: 900px) {
+    .about {
+      grid-template-columns: 1.6fr 1fr;
+      align-items: center;
+    }
+  }
+
+  .about-text p {
+    max-width: 62ch;
+  }
+
+  .mission {
+    position: relative;
+    padding: var(--space-xl);
+    border-radius: var(--radius);
+    background: var(--color-primary);
+    color: #fff;
+    box-shadow: var(--shadow-lift);
+    overflow: hidden;
+  }
+
+  .mission::after {
+    content: '';
+    position: absolute;
+    right: -3rem;
+    top: -3rem;
+    width: 10rem;
+    height: 10rem;
+    border-radius: 50%;
+    background: rgb(255 255 255 / 0.07);
+  }
+
+  .mission h2 {
+    color: #fff;
+    font-size: var(--step-2);
+  }
+
+  .mission ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: var(--space-s);
+  }
+
+  .mission li {
+    font-family: var(--font-display);
+    font-size: var(--step-1);
+    line-height: 1.3;
+    padding-left: 1.2rem;
+    border-left: 3px solid var(--color-accent);
+  }
+
+  .pillar {
+    display: flex;
+    flex-direction: column;
+    background: var(--color-surface);
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    color: inherit;
+    text-decoration: none;
+    transition: transform 0.25s, box-shadow 0.25s;
+  }
+
+  .pillar:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lift);
+    color: inherit;
+  }
+
+  .pillar img {
+    aspect-ratio: 16 / 10;
+    width: 100%;
+    object-fit: cover;
+  }
+
+  .pillar-body {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    padding: var(--space-l);
+  }
+
+  .pillar-label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-accent);
+    margin-bottom: var(--space-xs);
+  }
+
+  .pillar p {
+    font-size: var(--step--1);
+    color: var(--color-muted);
+  }
+
+  .pillar-more {
+    margin-top: auto;
+    font-weight: 600;
+    font-size: var(--step--1);
+    color: var(--color-primary);
+  }
+
+  .section-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: end;
+    justify-content: space-between;
+    gap: var(--space-m);
+    margin-bottom: var(--space-xl);
+  }
+
+  .section-row h2 {
+    margin: 0;
+  }
+
+  .join-inner {
+    display: grid;
+    gap: var(--space-l);
+    align-items: center;
+  }
+
+  @media (min-width: 800px) {
+    .join-inner {
+      grid-template-columns: 1.5fr auto;
+    }
+  }
+
+  .join p {
+    max-width: 55ch;
+    margin: 0;
+  }
+
+  .join-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-s);
+  }
+</style>

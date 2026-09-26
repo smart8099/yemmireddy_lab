@@ -1,0 +1,23 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHero from '../../components/PageHero.astro';
+import NewsCard from '../../components/NewsCard.astro';
+import { getPublishedNews } from '../../lib/site';
+
+const posts = await getPublishedNews();
+---
+
+<BaseLayout title="News" description="News from the Yemmireddy Lab: publications, presentations, awards, outreach events, and lab updates.">
+  <PageHero eyebrow="Updates" title="News" subtitle="Publications, presentations, awards, and events from the lab." />
+  <section class="section">
+    <div class="container">
+      {
+        posts.length > 0 ? (
+          <div class="grid grid--3">{posts.map((post) => <NewsCard post={post} headingLevel="h2" />)}</div>
+        ) : (
+          <p class="lead">No news yet — check back soon.</p>
+        )
+      }
+    </div>
+  </section>
+</BaseLayout>

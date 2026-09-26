@@ -1,0 +1,52 @@
+seo_title: Training & Outreach
+seo_description: Food safety education, training, and outreach for growers, food handlers, students, and communities in the Rio Grande Valley.
+title: Training & Outreach
+subtitle: Education. Empowerment. Evaluation.
+# DRAFT TEXT: the source document for this page contained photos only.
+# Please review and replace with the lab's own description.
+intro: |-
+  We translate food safety research into hands-on training for growers, food handlers, students, and community members across the Rio Grande Valley. Our programs combine interactive workshops, field demonstrations, and practical tools that help participants apply food safety practices in their own operations and homes.
+feature_photo:
+  image: ../../assets/images/outreach/education-empowerment-evaluation.png
+  alt: "Three pillars — Education, Empowerment, and Evaluation — supporting sustainable and resilient food safety systems"
+highlights:
+  - title: Education
+    text: Workshops and trainings that build practical food safety knowledge for growers, food handlers, and consumers.
+  - title: Empowerment
+    text: Hands-on activities and resources that help participants put safe practices to work in their farms, businesses, and communities.
+  - title: Evaluation
+    text: Measuring the outcomes of our programs to strengthen future training and support resilient food safety systems.
+gallery_title: Outreach in Action
+gallery:
+  - image: ../../assets/images/outreach/outreach-01.jpg
+    alt: Dr. Yemmireddy holding a certificate of recognition
+  - image: ../../assets/images/outreach/outreach-02.jpg
+    alt: Participants at tables during a food safety training presentation
+  - image: ../../assets/images/outreach/outreach-03.jpg
+    alt: A workshop room with participants and a speaker presenting slides
+  - image: ../../assets/images/outreach/outreach-04.jpg
+    alt: Community members attending a training session
+  - image: ../../assets/images/outreach/outreach-05.jpg
+    alt: Students demonstrating a hands-on activity to visitors
+  - image: ../../assets/images/outreach/outreach-06.jpg
+    alt: Participants gathered around a hands-on food safety activity
+  - image: ../../assets/images/outreach/outreach-07.jpg
+    alt: Participants working together on a large farm-map activity
+  - image: ../../assets/images/outreach/outreach-08.jpg
+    alt: Workshop participants reviewing illustrated activity cards
+  - image: ../../assets/images/outreach/outreach-09.jpg
+    alt: A handwashing demonstration using a UV light
+  - image: ../../assets/images/outreach/outreach-10.jpg
+    alt: Workshop participants posing for a group photo at a farm
+  - image: ../../assets/images/outreach/outreach-11.jpg
+    alt: Project team in front of a slide on closing gaps in food safety education for underserved communities in the Lower Rio Grande Valley
+  - image: ../../assets/images/outreach/outreach-12.jpg
+    alt: A large group photo of training participants
+  - image: ../../assets/images/outreach/outreach-13.jpg
+    alt: Rows of vegetables growing on a community farm
+  - image: ../../assets/images/outreach/outreach-15.jpg
+    alt: Community members seated during a training event
+  - image: ../../assets/images/outreach/outreach-16.jpg
+    alt: Participants at tables completing a training activity
+  - image: ../../assets/images/outreach/outreach-17.jpg
+    alt: A training room set up with participants at long tables

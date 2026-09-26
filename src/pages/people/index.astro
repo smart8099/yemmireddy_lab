@@ -1,0 +1,203 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHero from '../../components/PageHero.astro';
+import PersonCard from '../../components/PersonCard.astro';
+import { getPage, roleHeading, roleOrder } from '../../lib/site';
+
+const people = (await getCollection('people')).sort((a, b) => a.data.order - b.data.order || a.data.name.localeCompare(b.data.name));
+const groups = roleOrder
+  .map((role) => ({ role, heading: roleHeading[role], members: people.filter((p) => p.data.role === role) }))
+  .filter((g) => g.members.length > 0);
+const alumni = await getPage('alumni');
+---
+
+<BaseLayout
+  title="People"
+  description="Meet the Yemmireddy Lab team: researchers in food science, microbiology, engineering, molecular biology, chemistry, health science, and quantitative modeling."
+>
+  <PageHero eyebrow="Our team" title="People">
+    <p class="lead intro">
+      The Yemmireddy Lab brings together researchers with backgrounds in food science, microbiology, engineering, molecular biology, chemistry, health science, and quantitative modeling. Our team works across disciplines to understand foodborne microorganisms, develop effective controls, protect food quality, and translate research into practice.
+    </p>
+  </PageHero>
+
+  {
+    groups.map((g, i) => (
+      <section class:list={['section', 'people-group', { 'section--tint': i % 2 === 1 }]} aria-labelledby={`g-${i}`}>
+        <div class="container">
+          <h2 id={`g-${i}`}>{g.heading}</h2>
+          {g.role === 'Principal Investigator' ? (
+            g.members.map((p) => <PersonCard person={p} featured />)
+          ) : (
+            <div class="grid grid--4">{g.members.map((p) => <PersonCard person={p} />)}</div>
+          )}
+        </div>
+      </section>
+    ))
+  }
+
+  {
+    (alumni.graduate.length > 0 || alumni.undergraduate.length > 0) && (
+      <section class="section alumni" aria-labelledby="alumni">
+        <div class="container">
+          <h2 id="alumni">Lab Alumni</h2>
+          {alumni.graduate.length > 0 && (
+            <>
+              <h3>Graduate Students</h3>
+              <div class="table-wrap">
+                <table class="alumni-table">
+                  <thead>
+                    <tr>
+                      <th scope="col">Name</th>
+                      <th scope="col">Degree</th>
+                      <th scope="col">Current position</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {alumni.graduate.map((a) => (
+                      <tr>
+                        <th scope="row" data-label="Name">{a.name}</th>
+                        <td data-label="Degree">{a.degree}</td>
+                        <td data-label="Current position">{a.current_position ?? '—'}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </>
+          )}
+          {alumni.undergraduate.length > 0 && (
+            <>
+              <h3>Undergraduate Students</h3>
+              <ul class="alumni-list">
+                {alumni.undergraduate.map((a) => (
+                  <li>
+                    <strong>{a.name}</strong>
+                    {a.program && <span>{a.program}</span>}
+                  </li>
+                ))}
+              </ul>
+            </>
+          )}
+        </div>
+      </section>
+    )
+  }
+</BaseLayout>
+
+<style>
+  .intro {
+    max-width: 50rem;
+    margin-top: var(--space-m);
+  }
+
+  .people-group h2 {
+    margin-bottom: var(--space-l);
+  }
+
+  .alumni h3 {
+    margin-top: var(--space-xl);
+  }
+
+  .table-wrap {
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius);
+    overflow: hidden;
+    background: var(--color-surface);
+    box-shadow: var(--shadow);
+  }
+
+  .alumni-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--step--1);
+  }
+
+  .alumni-table th,
+  .alumni-table td {
+    text-align: left;
+    padding: 0.85rem 1.1rem;
+    border-bottom: 1px solid var(--color-line);
+    vertical-align: top;
+  }
+
+  .alumni-table thead th {
+    background: var(--color-primary);
+    color: #fff;
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .alumni-table tbody tr:nth-child(even) {
+    background: #f6f8f7;
+  }
+
+  .alumni-table tbody tr:last-child > * {
+    border-bottom: 0;
+  }
+
+  .alumni-table tbody th {
+    font-weight: 650;
+    color: var(--color-primary-strong);
+  }
+
+  /* Stack the table into cards on small screens */
+  @media (max-width: 640px) {
+    .alumni-table thead {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+    }
+
+    .alumni-table tr {
+      display: block;
+      padding: 0.85rem 1rem;
+      border-bottom: 1px solid var(--color-line);
+    }
+
+    .alumni-table th,
+    .alumni-table td {
+      display: block;
+      padding: 0.1rem 0;
+      border: 0;
+    }
+
+    .alumni-table td::before {
+      content: attr(data-label) ': ';
+      font-weight: 600;
+      color: var(--color-muted);
+    }
+
+    .alumni-table tbody th {
+      font-size: var(--step-0);
+      margin-bottom: 0.2rem;
+    }
+  }
+
+  .alumni-list {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    gap: var(--space-s);
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 15rem), 1fr));
+  }
+
+  .alumni-list li {
+    display: flex;
+    flex-direction: column;
+    padding: 0.75rem 1rem;
+    background: var(--color-surface);
+    border: 1px solid var(--color-line);
+    border-left: 4px solid var(--color-primary);
+    border-radius: var(--radius-s);
+    font-size: var(--step--1);
+  }
+
+  .alumni-list span {
+    color: var(--color-muted);
+  }
+</style>

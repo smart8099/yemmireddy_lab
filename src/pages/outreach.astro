@@ -1,0 +1,103 @@
+---
+import { Image } from 'astro:assets';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import Gallery from '../components/Gallery.astro';
+import Paragraphs from '../components/Paragraphs.astro';
+import { getPage } from '../lib/site';
+
+const page = await getPage('outreach');
+---
+
+<BaseLayout title={page.seo_title || page.title} description={page.seo_description || page.intro}>
+  <PageHero eyebrow={page.title} title={page.subtitle} />
+
+  <section class="section">
+    <div class="container split">
+      <div>
+        <Paragraphs text={page.intro} class="lead" />
+      </div>
+      {
+        page.feature_photo && (
+          <figure class="feature">
+            <Image src={page.feature_photo.image} alt={page.feature_photo.alt} widths={[482]} sizes="(min-width: 900px) 482px, 92vw" loading="eager" />
+          </figure>
+        )
+      }
+    </div>
+  </section>
+
+  {
+    page.highlights.length > 0 && (
+      <section class="section section--tint">
+        <div class="container grid grid--3">
+          {page.highlights.map((h, i) => (
+            <div class="card highlight">
+              <span class="highlight-num" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+              <h2>{h.title}</h2>
+              <p>{h.text}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+    )
+  }
+
+  {
+    page.gallery.length > 0 && (
+      <section class="section" aria-labelledby="gallery">
+        <div class="container">
+          <div class="section-head">
+            <h2 id="gallery">{page.gallery_title}</h2>
+          </div>
+          <Gallery photos={page.gallery} layout="masonry" />
+        </div>
+      </section>
+    )
+  }
+</BaseLayout>
+
+<style>
+  .split {
+    display: grid;
+    gap: var(--space-xl);
+    align-items: center;
+  }
+
+  @media (min-width: 900px) {
+    .split {
+      grid-template-columns: 1.2fr 1fr;
+    }
+  }
+
+  .feature {
+    margin: 0;
+  }
+
+  .feature img {
+    width: 100%;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    background: #fff;
+  }
+
+  .highlight {
+    border-top: 4px solid var(--color-accent);
+  }
+
+  .highlight-num {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: var(--step-2);
+    color: var(--color-accent);
+  }
+
+  .highlight h2 {
+    font-size: var(--step-1);
+  }
+
+  .highlight p {
+    color: var(--color-muted);
+    margin: 0;
+  }
+</style>

@@ -1,0 +1,165 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import { getPage, getSettings } from '../lib/site';
+
+const page = await getPage('publications_page');
+const settings = await getSettings();
+const pubs = (await getCollection('publications')).map((p) => p.data).sort((a, b) => b.year - a.year || a.title.localeCompare(b.title));
+const years = [...new Set(pubs.map((p) => p.year))];
+type Pub = (typeof pubs)[number];
+const citation = (p: Pub) =>
+  [p.volume && `${p.volume}${p.issue ? `(${p.issue})` : ''}`, p.pages].filter(Boolean).join(', ');
+// Bold the PI's name in author lists.
+const authorsHtml = (authors: string) =>
+  authors
+    .split(/,\s*/)
+    .map((a) => a.replace(/[&<>"]/g, (c) => `&#${c.charCodeAt(0)};`))
+    .map((a) => (/yemmireddy/i.test(a) ? `<strong>${a}</strong>` : a))
+    .join(', ');
+const link = (p: Pub) => p.url ?? (p.doi ? `https://doi.org/${p.doi.replace(/^https?:\/\/(dx\.)?doi\.org\//, '')}` : undefined);
+
+const jsonLd = pubs.slice(0, 50).map((p) => ({
+  '@type': 'ScholarlyArticle',
+  headline: p.title,
+  author: p.authors,
+  datePublished: String(p.year),
+  isPartOf: p.venue,
+  sameAs: p.doi ? `https://doi.org/${p.doi}` : undefined,
+  url: link(p),
+}));
+---
+
+<BaseLayout title={page.seo_title || page.title} description={page.seo_description || page.intro} jsonLd={jsonLd}>
+  <PageHero eyebrow="Research output" title={page.title} subtitle={page.intro}>
+    {settings.google_scholar && <p class="scholar"><a class="btn" href={settings.google_scholar}>View on Google Scholar</a></p>}
+  </PageHero>
+
+  <section class="section">
+    <div class="container">
+      {
+        pubs.length === 0 ? (
+          <p class="lead">Our publication list is being updated.{settings.google_scholar && ' In the meantime, please see Google Scholar.'}</p>
+        ) : (
+          <>
+            <div class="pub-tools">
+              <label for="pub-search" class="visually-hidden">Search publications</label>
+              <input id="pub-search" type="search" placeholder="Search by title, author, or journal…" autocomplete="off" />
+              <p class="pub-count" aria-live="polite"><span data-count>{pubs.length}</span> publications</p>
+            </div>
+            {years.map((year) => (
+              <section class="pub-year" data-year>
+                <h2>{year}</h2>
+                <ol class="pubs">
+                  {pubs.filter((p) => p.year === year).map((p) => (
+                    <li class="pub" data-search={`${p.title} ${p.authors} ${p.venue ?? ''} ${p.year}`.toLowerCase()}>
+                      <p class="pub-title">{link(p) ? <a href={link(p)}>{p.title}</a> : p.title}</p>
+                      <p class="pub-authors" set:html={authorsHtml(p.authors)} />
+                      <p class="pub-venue">
+                        {p.venue && <span><em>{p.venue}</em>{citation(p) && `, ${citation(p)}`}</span>}
+                        {p.type !== 'Journal article' && <span class="tag">{p.type}</span>}
+                      </p>
+                    </li>
+                  ))}
+                </ol>
+              </section>
+            ))}
+          </>
+        )
+      }
+    </div>
+  </section>
+</BaseLayout>
+
+<script>
+  const input = document.querySelector<HTMLInputElement>('#pub-search');
+  const count = document.querySelector('[data-count]');
+  input?.addEventListener('input', () => {
+    const q = input.value.trim().toLowerCase();
+    let shown = 0;
+    document.querySelectorAll<HTMLElement>('[data-year]').forEach((group) => {
+      let any = false;
+      group.querySelectorAll<HTMLElement>('.pub').forEach((li) => {
+        const match = !q || (li.dataset.search ?? '').includes(q);
+        li.hidden = !match;
+        if (match) { any = true; shown++; }
+      });
+      group.hidden = !any;
+    });
+    if (count) count.textContent = String(shown);
+  });
+</script>
+
+<style>
+  .scholar {
+    margin-top: var(--space-l);
+  }
+
+  .pub-tools {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-m);
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--space-xl);
+  }
+
+  #pub-search {
+    flex: 1 1 20rem;
+    max-width: 32rem;
+    font: inherit;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--color-line);
+    border-radius: 999px;
+    background: var(--color-surface);
+  }
+
+  .pub-count {
+    margin: 0;
+    color: var(--color-muted);
+    font-size: var(--step--1);
+  }
+
+  .pub-year h2 {
+    font-size: var(--step-2);
+    padding-bottom: var(--space-xs);
+    border-bottom: 2px solid var(--color-primary-soft);
+  }
+
+  .pubs {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 var(--space-xl);
+  }
+
+  .pub {
+    padding: var(--space-m) 0;
+    border-bottom: 1px solid var(--color-line);
+  }
+
+  .pub p {
+    margin: 0;
+  }
+
+  .pub-title {
+    font-weight: 650;
+  }
+
+  .pub-authors :global(strong) {
+    color: var(--color-text);
+  }
+
+  .pub-authors,
+  .pub-venue {
+    font-size: var(--step--1);
+    color: var(--color-muted);
+  }
+
+  .pub-venue {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+</style>

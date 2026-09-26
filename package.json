@@ -1,0 +1,28 @@
+{
+  "name": "yemmireddy-lab-website",
+  "version": "1.0.0",
+  "description": "Website for the Yemmireddy Lab (food safety & food microbiology, UTRGV)",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "check": "astro check",
+    "images:compress": "node scripts/compress-images.mjs --all"
+  },
+  "license": "UNLICENSED",
+  "type": "module",
+  "dependencies": {
+    "@astrojs/sitemap": "^3.7.4",
+    "@fontsource-variable/inter": "^5.3.0",
+    "@fontsource-variable/source-serif-4": "^5.3.0",
+    "astro": "^7.3.5"
+  },
+  "private": true,
+  "engines": {
+    "node": ">=22"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.10",
+    "typescript": "^6.0.3"
+  }
+}

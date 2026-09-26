@@ -1,0 +1,298 @@
+---
+import type { ImageMetadata } from 'astro';
+import OriginalGraphic from './OriginalGraphic.astro';
+
+/**
+ * "From Evidence to Decision" QMRA cycle, drawn with HTML/CSS/SVG so it stays
+ * sharp and becomes a numbered timeline on small screens.
+ * Text comes from src/content/pages/research.yml (decision_cycle).
+ */
+interface Props {
+  cycle: {
+    title: string;
+    subtitle?: string;
+    hub_label?: string;
+    hub_title: string;
+    hub_note?: string;
+    steps: { title: string; details: string[] }[];
+    outcomes_label?: string;
+    outcomes: string[];
+    original_image?: { image: ImageMetadata; alt: string };
+  };
+}
+const { cycle: c } = Astro.props;
+
+// Desktop ring (5-step layout only): arrowheads placed in the visible gaps
+// between the cards, pointing clockwise.
+const cx = 500, cy = 300, rx = 400, ry = 245;
+const n = c.steps.length;
+const arrows = [-54, 26, 70, 157, 234].map((deg) => {
+  const t = (deg * Math.PI) / 180;
+  const x = cx + rx * Math.cos(t);
+  const y = cy + ry * Math.sin(t);
+  const angle = (Math.atan2(ry * Math.cos(t), -rx * Math.sin(t)) * 180) / Math.PI;
+  return { x, y, angle };
+});
+---
+
+<figure class="dc" aria-labelledby="dc-title">
+  <figcaption class="dc-head">
+    <h3 id="dc-title">{c.title}</h3>
+    {c.subtitle && <p>{c.subtitle}</p>}
+  </figcaption>
+
+  <div class:list={['dc-body', { 'dc-body--five': n === 5 }]}>
+    {
+      n === 5 && (
+        <svg class="dc-ring" viewBox="0 0 1000 600" preserveAspectRatio="none" aria-hidden="true">
+          <ellipse cx={cx} cy={cy} rx={rx} ry={ry} fill="none" stroke="currentColor" stroke-width="3" vector-effect="non-scaling-stroke" />
+          {arrows.map((a) => (
+            <path d="M-11 -9 L11 0 L-11 9 Z" fill="currentColor" transform={`translate(${a.x.toFixed(1)} ${a.y.toFixed(1)}) rotate(${a.angle.toFixed(1)})`} />
+          ))}
+        </svg>
+      )
+    }
+
+    <div class="dc-hub">
+      {c.hub_label && <span class="dc-hub-label">{c.hub_label}</span>}
+      <strong>{c.hub_title}</strong>
+      {c.hub_note && <span class="dc-hub-note">{c.hub_note}</span>}
+    </div>
+
+    <ol class="dc-steps">
+      {
+        c.steps.map((s, i) => (
+          <li class="dc-step" data-slot={i + 1}>
+            <span class="dc-step-num">{String(i + 1).padStart(2, '0')}</span>
+            <strong>{s.title}</strong>
+            {s.details.length > 0 && <span class="dc-step-details">{s.details.join(' • ')}</span>}
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+
+  {
+    c.outcomes.length > 0 && (
+      <p class="dc-outcomes">
+        {c.outcomes_label && <span class="dc-outcomes-label">{c.outcomes_label}</span>}
+        <span>{c.outcomes.join(' • ')}</span>
+      </p>
+    )
+  }
+
+  {c.original_image && <OriginalGraphic photo={c.original_image} />}
+</figure>
+
+<style>
+  .dc {
+    margin: 0;
+    padding: clamp(1.25rem, 0.5rem + 3vw, 2.75rem);
+    background: #f4f8f7;
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+  }
+
+  .dc-head {
+    text-align: center;
+    margin-bottom: var(--space-l);
+  }
+
+  .dc-head h3 {
+    font-size: var(--step-2);
+    margin-bottom: 0.2rem;
+  }
+
+  .dc-head p {
+    color: var(--color-muted);
+    margin: 0;
+  }
+
+  .dc-body {
+    position: relative;
+  }
+
+  .dc-ring {
+    display: none;
+  }
+
+  .dc-hub {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 0.35rem;
+    padding: var(--space-l);
+    border-radius: var(--radius);
+    background: var(--color-primary);
+    color: #fff;
+    margin-bottom: var(--space-l);
+  }
+
+  .dc-hub strong {
+    font-family: var(--font-display);
+    font-size: var(--step-2);
+    line-height: 1.15;
+  }
+
+  .dc-hub-label {
+    font-size: 0.68rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #bfe0da;
+  }
+
+  .dc-hub-note {
+    padding-top: 0.45rem;
+    border-top: 1px solid rgb(255 255 255 / 0.3);
+    font-size: var(--step--1);
+    color: #e2f0ed;
+  }
+
+  /* Phones and tablets: numbered timeline */
+  .dc-steps {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: var(--space-s);
+    position: relative;
+  }
+
+  .dc-steps::before {
+    content: '';
+    position: absolute;
+    left: 1.1rem;
+    top: 1rem;
+    bottom: 1rem;
+    width: 2px;
+    background: #e3a67f;
+  }
+
+  .dc-step {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    margin-left: 2.6rem;
+    padding: var(--space-m) var(--space-l);
+    background: var(--color-surface);
+    border: 1px solid var(--color-line);
+    border-left: 4px solid var(--color-accent);
+    border-radius: var(--radius-s);
+    box-shadow: 0 1px 3px rgb(16 40 37 / 0.06);
+  }
+
+  .dc-step::before {
+    content: '';
+    position: absolute;
+    left: calc(-1.5rem - 7px);
+    top: 1.25rem;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--color-accent);
+    box-shadow: 0 0 0 3px #f4f8f7;
+  }
+
+  .dc-step-num {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--color-accent);
+  }
+
+  .dc-step strong {
+    color: var(--color-primary-strong);
+    font-size: var(--step-0);
+  }
+
+  .dc-step-details {
+    font-size: var(--step--1);
+    color: var(--color-muted);
+  }
+
+  /* Desktop: steps arranged around the hub on a ring */
+  @media (min-width: 960px) {
+    .dc-body--five {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      grid-template-rows: auto auto auto;
+      grid-template-areas:
+        '.  s1  .'
+        's5 hub s2'
+        's4 .   s3';
+      gap: var(--space-l) var(--space-xl);
+      align-items: center;
+      padding-block: var(--space-s);
+    }
+
+    .dc-body--five .dc-steps {
+      display: contents;
+    }
+
+    .dc-body--five .dc-steps::before,
+    .dc-body--five .dc-step::before {
+      display: none;
+    }
+
+    .dc-body--five .dc-step {
+      margin: 0;
+      z-index: 1;
+    }
+
+    .dc-body--five [data-slot='1'] { grid-area: s1; justify-self: center; width: min(100%, 20rem); }
+    .dc-body--five [data-slot='2'] { grid-area: s2; }
+    .dc-body--five [data-slot='3'] { grid-area: s3; justify-self: start; width: min(100%, 20rem); }
+    .dc-body--five [data-slot='4'] { grid-area: s4; justify-self: end; width: min(100%, 20rem); }
+    .dc-body--five [data-slot='5'] { grid-area: s5; }
+
+    .dc-body--five .dc-hub {
+      grid-area: hub;
+      grid-row: 2 / span 2;
+      align-self: center;
+      justify-self: center;
+      width: min(100%, 16.5rem);
+      aspect-ratio: 1;
+      justify-content: center;
+      border-radius: 50%;
+      margin: 0;
+      z-index: 1;
+      outline: 1px solid rgb(255 255 255 / 0.3);
+      outline-offset: -10px;
+    }
+
+    .dc-ring {
+      display: block;
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      color: #d9824f;
+    }
+  }
+
+  .dc-outcomes {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 0.4rem 1rem;
+    margin: var(--space-l) auto 0;
+    padding: 0.7rem 1.25rem;
+    max-width: 44rem;
+    text-align: center;
+    border-radius: 999px;
+    background: var(--color-primary-soft);
+    font-weight: 600;
+    color: var(--color-primary-strong);
+    font-size: var(--step--1);
+  }
+
+  .dc-outcomes-label {
+    font-size: 0.7rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--color-accent);
+  }
+</style>

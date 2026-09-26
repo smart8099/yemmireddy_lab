@@ -1,0 +1,11 @@
+---
+import { paragraphs } from '../lib/site';
+
+interface Props {
+  text?: string;
+  class?: string;
+}
+const { text, class: className } = Astro.props;
+---
+
+{paragraphs(text).map((p) => <p class={className}>{p}</p>)}

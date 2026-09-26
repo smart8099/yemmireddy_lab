@@ -1,0 +1,49 @@
+seo_title: Teaching
+seo_description: Courses in microbiology, food science, and nanotechnology for food and agriculture, taught with an emphasis on active learning, evidence-based reasoning, and scientific communication.
+title: Teaching
+subtitle: Learning Science by Applying It
+intro: I design courses that help students move from understanding foundational concepts to applying them to meaningful problems in microbiology, food safety, and food systems. My teaching emphasizes active participation, evidence-based reasoning, collaborative problem-solving, and clear scientific communication.
+feature_photo:
+  image: ../../assets/images/teaching/classroom-1.jpg
+  alt: Students seated in a large lecture hall during class
+approach_title: My Teaching Approach
+approach:
+  - title: Connect
+    text: Relate scientific concepts to current cases, practical applications, and career-relevant challenges.
+  - title: Engage
+    text: Involve students through discussion, inquiry, laboratory experiences, and collaborative problem-solving.
+  - title: Apply
+    text: Prepare students to analyze evidence, make informed decisions, and communicate scientific conclusions effectively.
+courses_title: Courses Taught Regularly
+courses:
+  - code: BIOL 3401
+    title: General Microbiology
+    level: Undergraduate
+  - code: BIOL 6321
+    title: Applied Microbiology
+    level: Graduate
+  - code: EEMS 4360/6360
+    title: Food Science
+    level: Undergraduate and graduate
+  - code: EEMS 4366/6365
+    title: Nanotechnologies for Food and Agriculture
+    level: Undergraduate and graduate
+gallery_title: Learning in Action
+gallery:
+  - image: ../../assets/images/teaching/classroom-2.jpg
+    alt: Students in a classroom watching a lecture with remote participants on screen
+  - image: ../../assets/images/teaching/classroom-3.jpg
+    alt: A large group of students on a guided visit
+  - image: ../../assets/images/teaching/classroom-4.jpg
+    alt: Students seated at lab benches during a class session
+mentoring_title: Mentoring Beyond the Classroom
+mentoring_text: I mentor undergraduate and graduate students through laboratory research, collaborative projects, scientific presentations, and manuscript development. These experiences help students strengthen their technical abilities, scientific judgment, communication skills, and professional confidence.
+mentoring_photos:
+  - image: ../../assets/images/teaching/mentoring-1.jpg
+    alt: Students in lab coats working together at a lab bench
+  - image: ../../assets/images/teaching/mentoring-2.jpg
+    alt: Mentor and student working inside a biosafety cabinet
+  - image: ../../assets/images/teaching/mentoring-3.jpg
+    alt: Researchers collecting leafy green samples in the field
+  - image: ../../assets/images/teaching/mentoring-4.jpg
+    alt: Two researchers running water-quality tests at an outdoor station

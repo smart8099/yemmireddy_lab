@@ -1,0 +1,40 @@
+graduate:
+  - name: Titus Puorizaa
+    degree: MS in Chemistry, 2026
+    current_position: Pursuing PhD in Chemistry at University of Oklahoma
+  - name: Sairithin Kothur Thirupathi
+    degree: MS in Ag, Env, & Sustainability Sciences, 2025
+    current_position: Employed in Produce Industry
+  - name: Esther Oginni
+    degree: MS in Ag, Env, & Sustainability Sciences, 2024
+    current_position: Employed at Penn State University
+  - name: Avninder Kaur
+    degree: MS in Biochem & Molecular Biology, 2023
+    current_position: Pursuing PhD in Plant Genetics at University of Florida
+  - name: Matthew Mancias
+    degree: MS in Biology candidate, 2022
+    current_position: Employed in supply chain industry
+  - name: Asfakur Rahman
+    degree: MS in Biology, 2022
+    current_position: Employed in Pharma Industry
+  - name: Rajat Sharma
+    degree: MS in Biochem & Molecular Biology, 2021
+    current_position: Employed in Analytical Lab Services
+  - name: Amandeep Singh
+    degree: MS in Ag, Env, & Sustainability Sciences, 2021
+    current_position: Pursuing PhD in Food Science at Purdue University
+undergraduate:
+  - { name: Sunakhi Sahoo, program: MSA student }
+  - { name: Stacie Durrazzo, program: BS in Biology }
+  - { name: Mikela Mainit, program: MSA student }
+  - { name: Christine Teju, program: MSA student }
+  - { name: Jared Luikham, program: MSA student }
+  - { name: Agustin Hernandez, program: MSA student }
+  - { name: Arianna Hernandez, program: BS in Sustainable Agriculture and Food Systems }
+  - { name: Alvia Shaju, program: MSA student }
+  - { name: Colin Shiby, program: MSA student }
+  - { name: Alfia Bilal, program: MSA student }
+  - { name: Catherine Clark, program: BS in Chemistry }
+  - { name: Joel Flores, program: BS in Biology }
+  - { name: Luis Saenz, program: BS in Chemistry }
+  - { name: Nora Sustaita, program: BS in Biology }

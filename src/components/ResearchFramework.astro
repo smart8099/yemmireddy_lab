@@ -1,0 +1,428 @@
+---
+import type { ImageMetadata } from 'astro';
+import OriginalGraphic from './OriginalGraphic.astro';
+
+/**
+ * "From Insight to Impact" framework, drawn with HTML/CSS so it stays sharp
+ * and reflows on small screens. Text comes from src/content/pages/research.yml.
+ */
+interface Props {
+  framework: {
+    title: string;
+    subtitle?: string;
+    system_label?: string;
+    stages: string[];
+    flow_note?: string;
+    core_label?: string;
+    core_title: string;
+    core_note?: string;
+    areas: { name: string; title: string; question?: string }[];
+    practice_label?: string;
+    practice: string[];
+    impact_title?: string;
+    impact: string[];
+    original_image?: { image: ImageMetadata; alt: string };
+  };
+}
+const { framework: f } = Astro.props;
+const tones = ['understand', 'control', 'inform'];
+---
+
+<figure class="fw" aria-labelledby="fw-title">
+  <figcaption class="fw-head">
+    <h3 id="fw-title">{f.title}</h3>
+    {f.subtitle && <p>{f.subtitle}</p>}
+  </figcaption>
+
+  {
+    f.stages.length > 0 && (
+      <div class="fw-system">
+        {f.system_label && <p class="fw-label">{f.system_label}</p>}
+        <ol class="fw-stages">
+          {f.stages.map((s) => (
+            <li>{s}</li>
+          ))}
+        </ol>
+      </div>
+    )
+  }
+
+  {
+    f.flow_note && (
+      <p class="fw-flow">
+        <span>{f.flow_note}</span>
+        <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M12 4v14m0 0-6-6m6 6 6-6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" /></svg>
+      </p>
+    )
+  }
+
+  <div class="fw-core">
+    <svg class="fw-ring" viewBox="0 0 1000 400" preserveAspectRatio="none" aria-hidden="true">
+      <ellipse cx="500" cy="215" rx="400" ry="150" fill="none" stroke="currentColor" stroke-width="2" vector-effect="non-scaling-stroke" />
+    </svg>
+    <div class="fw-hub">
+      {f.core_label && <span class="fw-hub-label">{f.core_label}</span>}
+      <strong>{f.core_title}</strong>
+      {f.core_note && <span class="fw-hub-note">{f.core_note}</span>}
+    </div>
+    {
+      f.areas.map((a, i) => (
+        <div class:list={['fw-area', `fw-area--${tones[i % tones.length]}`]}>
+          <p class="fw-area-name">
+            <span class="fw-num">{i + 1}</span>
+            {a.name}
+          </p>
+          <p class="fw-area-title">{a.title}</p>
+          {a.question && <p class="fw-area-q">{a.question}</p>}
+        </div>
+      ))
+    }
+  </div>
+
+  {
+    (f.practice.length > 0 || f.impact.length > 0) && (
+      <div class="fw-practice">
+        {f.practice_label && <p class="fw-label fw-label--center">{f.practice_label}</p>}
+        <div class="fw-practice-row">
+          {f.practice.map((p) => (
+            <span class="fw-pill">{p}</span>
+          ))}
+          <svg class="fw-arrow" viewBox="0 0 48 24" width="48" height="24" aria-hidden="true"><path d="M2 12h40m0 0-9-8m9 8-9 8" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" /></svg>
+          <div class="fw-impact">
+            {f.impact_title && <strong>{f.impact_title}</strong>}
+            <ul>{f.impact.map((x) => <li>{x}</li>)}</ul>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  {f.original_image && <OriginalGraphic photo={f.original_image} />}
+</figure>
+
+<style>
+  .fw {
+    --understand: #0e5a54;
+    --understand-bg: #e3f0ee;
+    --control: #a8440f;
+    --control-bg: #fbeee5;
+    --inform: #5446a8;
+    --inform-bg: #ecebf8;
+    margin: 0;
+    padding: clamp(1.25rem, 0.5rem + 3vw, 2.75rem);
+    background: var(--color-surface);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+  }
+
+  .fw-head h3 {
+    font-size: var(--step-2);
+    margin-bottom: 0.2rem;
+  }
+
+  .fw-head p {
+    color: var(--color-muted);
+    margin: 0 0 var(--space-l);
+  }
+
+  .fw-label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-primary);
+    margin: 0 0 var(--space-s);
+  }
+
+  .fw-label--center {
+    text-align: center;
+  }
+
+  /* The system we study: a horizontal timeline, vertical on phones */
+  .fw-stages {
+    list-style: none;
+    margin: 0;
+    padding: var(--space-m) var(--space-l);
+    display: grid;
+    gap: var(--space-s);
+    background: var(--understand-bg);
+    border-radius: var(--radius-s);
+    position: relative;
+  }
+
+  .fw-stages li {
+    position: relative;
+    padding-left: 1.6rem;
+    font-weight: 600;
+    font-size: var(--step--1);
+    color: var(--color-primary-strong);
+  }
+
+  .fw-stages li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    width: 0.8rem;
+    height: 0.8rem;
+    margin-top: -0.4rem;
+    border-radius: 50%;
+    background: var(--understand);
+    box-shadow: 0 0 0 3px var(--understand-bg);
+  }
+
+  @media (min-width: 760px) {
+    .fw-stages {
+      grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
+      padding: var(--space-l) 0 var(--space-m);
+      gap: 0;
+    }
+
+    .fw-stages::before {
+      content: '';
+      position: absolute;
+      left: 12.5%;
+      right: 12.5%;
+      top: calc(var(--space-l) + 0.4rem);
+      height: 2px;
+      background: #8cbfb8;
+    }
+
+    .fw-stages li {
+      padding: 1.4rem 0 0;
+      text-align: center;
+    }
+
+    .fw-stages li::before {
+      left: 50%;
+      top: 0;
+      margin: 0 0 0 -0.4rem;
+    }
+  }
+
+  .fw-flow {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.2rem;
+    margin: var(--space-m) 0;
+    text-align: center;
+    color: var(--color-muted);
+    font-size: var(--step--1);
+  }
+
+  .fw-flow svg {
+    color: #6b7f7c;
+  }
+
+  /* Scientific core: hub with the three research areas around it */
+  .fw-core {
+    position: relative;
+    display: grid;
+    gap: var(--space-m);
+  }
+
+  .fw-ring {
+    display: none;
+  }
+
+  .fw-hub {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 0.3rem;
+    padding: var(--space-l);
+    border-radius: var(--radius);
+    background: var(--color-primary-strong);
+    color: #fff;
+    position: relative;
+    z-index: 1;
+  }
+
+  .fw-hub strong {
+    font-family: var(--font-display);
+    font-size: var(--step-1);
+    line-height: 1.2;
+  }
+
+  .fw-hub-label {
+    font-size: 0.68rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #a9d3cc;
+  }
+
+  .fw-hub-note {
+    font-size: var(--step--1);
+    color: #d4e8e4;
+  }
+
+  .fw-area {
+    position: relative;
+    z-index: 1;
+    padding: var(--space-m) var(--space-l);
+    border-radius: var(--radius);
+    background: var(--tone-bg);
+    border-left: 4px solid var(--tone);
+  }
+
+  .fw-area--understand { --tone: var(--understand); --tone-bg: var(--understand-bg); }
+  .fw-area--control { --tone: var(--control); --tone-bg: var(--control-bg); }
+  .fw-area--inform { --tone: var(--inform); --tone-bg: var(--inform-bg); }
+
+  .fw-area p {
+    margin: 0;
+  }
+
+  .fw-area-name {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--tone);
+    margin-bottom: 0.35rem !important;
+  }
+
+  .fw-num {
+    display: inline-grid;
+    place-items: center;
+    width: 1.7rem;
+    height: 1.7rem;
+    border-radius: 50%;
+    background: var(--tone);
+    color: #fff;
+    font-size: 0.85rem;
+    letter-spacing: 0;
+  }
+
+  .fw-area-title {
+    font-weight: 650;
+    color: var(--color-text);
+  }
+
+  .fw-area-q {
+    font-size: var(--step--1);
+    color: var(--color-muted);
+    margin-top: 0.2rem !important;
+  }
+
+  @media (min-width: 900px) {
+    .fw-core {
+      grid-template-columns: 1fr minmax(13rem, 15rem) 1fr;
+      grid-template-areas:
+        '. u .'
+        'c hub i';
+      column-gap: var(--space-l);
+      row-gap: var(--space-l);
+      align-items: center;
+      padding-bottom: var(--space-l);
+    }
+
+    .fw-ring {
+      display: block;
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      color: #9fb3b0;
+    }
+
+    .fw-area:nth-of-type(2) { grid-area: u; }
+    .fw-area:nth-of-type(3) { grid-area: c; }
+    .fw-area:nth-of-type(4) { grid-area: i; }
+
+    .fw-area:nth-of-type(2) {
+      width: min(100%, 30rem);
+      justify-self: center;
+      grid-column: 1 / -1;
+    }
+
+    .fw-hub {
+      grid-area: hub;
+      aspect-ratio: 1;
+      border-radius: 50%;
+      outline: 1px solid rgb(255 255 255 / 0.25);
+      outline-offset: -10px;
+    }
+  }
+
+  /* Evidence into practice */
+  .fw-practice {
+    margin-top: var(--space-xl);
+    padding-top: var(--space-l);
+    border-top: 1px solid var(--color-line);
+  }
+
+  .fw-practice-row {
+    display: grid;
+    gap: var(--space-s);
+    justify-items: stretch;
+  }
+
+  .fw-pill {
+    display: grid;
+    place-items: center;
+    text-align: center;
+    padding: var(--space-m);
+    border-radius: var(--radius-s);
+    background: #f1f6f5;
+    font-weight: 600;
+  }
+
+  .fw-arrow {
+    justify-self: center;
+    color: var(--color-primary);
+    transform: rotate(90deg);
+  }
+
+  .fw-impact {
+    padding: var(--space-m) var(--space-l);
+    border-radius: var(--radius-s);
+    background: var(--understand-bg);
+    border: 1px solid #c3dfda;
+  }
+
+  .fw-impact strong {
+    display: block;
+    color: var(--color-primary);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    font-size: var(--step--1);
+  }
+
+  .fw-impact ul {
+    list-style: none;
+    padding: 0;
+    margin: 0.5rem 0 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+
+  .fw-impact li {
+    padding: 0.2rem 0.75rem;
+    border-radius: 999px;
+    background: var(--color-surface);
+    border: 1px solid #c3dfda;
+    font-size: var(--step--1);
+    font-weight: 600;
+    color: var(--color-primary-strong);
+  }
+
+  @media (min-width: 900px) {
+    .fw-practice-row {
+      grid-template-columns: 1fr 1fr auto 2fr;
+      align-items: stretch;
+    }
+
+    .fw-arrow {
+      align-self: center;
+      transform: none;
+    }
+  }
+</style>

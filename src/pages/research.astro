@@ -1,0 +1,140 @@
+---
+import { Image } from 'astro:assets';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import Gallery from '../components/Gallery.astro';
+import ResearchFramework from '../components/ResearchFramework.astro';
+import DecisionCycle from '../components/DecisionCycle.astro';
+import { getPage } from '../lib/site';
+
+const page = await getPage('research');
+---
+
+<BaseLayout title={page.seo_title || page.title} description={page.seo_description || page.intro}>
+  <PageHero eyebrow={page.title} title={page.subtitle}>
+    <p class="lead intro">{page.intro}</p>
+    {page.directions && <p class="directions">{page.directions}</p>}
+  </PageHero>
+
+  {
+    page.framework && (
+      <section class="section" aria-labelledby="framework">
+        <div class="container">
+          <div class="section-head section-head--center">
+            <h2 id="framework">{page.framework_title}</h2>
+          </div>
+          <ResearchFramework framework={page.framework} />
+        </div>
+      </section>
+    )
+  }
+
+  {
+    page.pillars.map((p, i) => (
+      <section id={`pillar-${i + 1}`} class:list={['section', 'pillar', { 'section--tint': i % 2 === 0 }]} aria-labelledby={`pillar-title-${i + 1}`}>
+        <div class="container">
+          <div class="pillar-head">
+            <span class="pillar-num" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+            <div>
+              <span class="eyebrow">{p.label}</span>
+              <h2 id={`pillar-title-${i + 1}`}>{p.title}</h2>
+              <p class="pillar-summary">{p.summary}</p>
+            </div>
+          </div>
+          {p.show_decision_cycle && page.decision_cycle && (
+            <div class="pillar-diagram">
+              <DecisionCycle cycle={page.decision_cycle} />
+            </div>
+          )}
+          {p.photos.length === 1 ? (
+            <figure class="pillar-figure">
+              <Image src={p.photos[0].image} alt={p.photos[0].alt} widths={[640, 960, 1400]} sizes="(min-width: 1000px) 760px, 96vw" />
+            </figure>
+          ) : (
+            p.photos.length > 1 && <Gallery photos={p.photos} />
+          )}
+        </div>
+      </section>
+    ))
+  }
+
+  {
+    page.closing_title && (
+      <section class="section section--dark closing">
+        <div class="container--narrow">
+          <h2>{page.closing_title}</h2>
+          {page.closing_text && <p class="closing-text">{page.closing_text}</p>}
+        </div>
+      </section>
+    )
+  }
+</BaseLayout>
+
+<style>
+  .intro {
+    max-width: 50rem;
+    margin-top: var(--space-m);
+  }
+
+  .directions {
+    font-weight: 600;
+    color: var(--color-primary-strong);
+    margin: 0;
+  }
+
+  .pillar-diagram {
+    margin-bottom: var(--space-xl);
+  }
+
+  .pillar-figure {
+    margin: 0 auto;
+    max-width: 760px;
+  }
+
+  .pillar-figure img {
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+  }
+
+  .pillar-head {
+    display: grid;
+    gap: var(--space-m);
+    margin-bottom: var(--space-xl);
+  }
+
+  @media (min-width: 760px) {
+    .pillar-head {
+      grid-template-columns: auto 1fr;
+      gap: var(--space-xl);
+      align-items: start;
+    }
+  }
+
+  .pillar-num {
+    font-family: var(--font-display);
+    font-size: clamp(3rem, 2rem + 5vw, 6rem);
+    font-weight: 700;
+    line-height: 0.9;
+    color: var(--color-primary);
+  }
+
+  .pillar-summary {
+    max-width: 62ch;
+    font-size: var(--step-1);
+    line-height: 1.6;
+    color: var(--color-muted);
+    margin: 0;
+  }
+
+  .closing {
+    text-align: center;
+  }
+
+  .closing-text {
+    font-family: var(--font-display);
+    font-size: var(--step-2);
+    line-height: 1.35;
+    color: #ffd3b8;
+    margin: 0;
+  }
+</style>

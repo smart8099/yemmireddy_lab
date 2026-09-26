@@ -1,0 +1,32 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { url } from '../lib/site';
+---
+
+<BaseLayout title="Page not found" noindex>
+  <section class="section">
+    <div class="container--narrow notfound">
+      <span class="eyebrow">404</span>
+      <h1>Page not found</h1>
+      <p class="lead">The page you're looking for may have moved. Try one of these instead:</p>
+      <p class="actions">
+        <a class="btn" href={url()}>Home</a>
+        <a class="btn btn--outline" href={url('research/')}>Research</a>
+        <a class="btn btn--outline" href={url('people/')}>People</a>
+      </p>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .notfound {
+    text-align: center;
+  }
+
+  .actions {
+    display: flex;
+    gap: var(--space-s);
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+</style>

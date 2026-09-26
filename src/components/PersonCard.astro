@@ -1,0 +1,151 @@
+---
+import { Image } from 'astro:assets';
+import type { CollectionEntry } from 'astro:content';
+import { url } from '../lib/site';
+
+interface Props {
+  person: CollectionEntry<'people'>;
+  featured?: boolean;
+}
+const { person, featured = false } = Astro.props;
+const p = person.data;
+const href = url(`people/${person.id}/`);
+const initials = p.name.split(/\s+/).map((w) => w[0]).slice(0, 2).join('');
+---
+
+<article class:list={['person-card', { 'person-card--featured': featured }]}>
+  <a href={href} class="person-photo" tabindex="-1" aria-hidden="true">
+    {
+      p.photo ? (
+        <Image src={p.photo} alt="" widths={[240, 400, 600]} sizes={featured ? '(min-width: 800px) 300px, 90vw' : '(min-width: 1000px) 260px, (min-width: 600px) 45vw, 90vw'} />
+      ) : (
+        <span class="person-initials">{initials}</span>
+      )
+    }
+  </a>
+  <div class="person-body">
+    <h3><a href={href}>{p.name}{p.honorific && <>, {p.honorific}</>}</a></h3>
+    <p class="person-position">{p.position.split('\n').map((line) => <span>{line}</span>)}</p>
+    {featured && p.research_interests && <p class="person-summary">{p.research_interests}</p>}
+    {!featured && p.current_research[0] && <p class="person-summary">{p.current_research[0]}</p>}
+    <a href={href} class="person-more">
+      View profile <span aria-hidden="true">→</span><span class="visually-hidden"> of {p.name}</span>
+    </a>
+  </div>
+</article>
+
+<style>
+  .person-card {
+    display: flex;
+    flex-direction: column;
+    background: var(--color-surface);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    transition: transform 0.25s, box-shadow 0.25s;
+  }
+
+  .person-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-lift);
+  }
+
+  .person-photo {
+    display: block;
+    aspect-ratio: 4 / 5;
+    overflow: hidden;
+    background: var(--color-primary-soft);
+  }
+
+  .person-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 50% 22%;
+  }
+
+  .person-initials {
+    display: grid;
+    place-items: center;
+    height: 100%;
+    font-family: var(--font-display);
+    font-size: 3rem;
+    color: var(--color-primary);
+  }
+
+  .person-body {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    padding: var(--space-m) var(--space-l) var(--space-l);
+  }
+
+  .person-body h3 {
+    margin-bottom: var(--space-2xs);
+  }
+
+  .person-body h3 a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .person-body h3 a:hover {
+    color: var(--color-primary);
+  }
+
+  .person-position {
+    display: flex;
+    flex-direction: column;
+    font-size: var(--step--1);
+    font-weight: 600;
+    color: var(--color-accent);
+    margin-bottom: var(--space-s);
+  }
+
+  .person-summary {
+    font-size: var(--step--1);
+    color: var(--color-muted);
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .person-more {
+    margin-top: auto;
+    font-size: var(--step--1);
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  .person-card--featured {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  @media (min-width: 760px) {
+    .person-card--featured {
+      grid-template-columns: minmax(220px, 300px) 1fr;
+    }
+
+    .person-card--featured .person-photo {
+      aspect-ratio: auto;
+      height: 100%;
+    }
+
+    .person-card--featured .person-body {
+      padding: var(--space-xl);
+      justify-content: center;
+    }
+
+    .person-card--featured h3 {
+      font-size: var(--step-2);
+    }
+
+    .person-card--featured .person-summary {
+      -webkit-line-clamp: 6;
+      font-size: var(--step-0);
+    }
+  }
+</style>

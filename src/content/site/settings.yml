@@ -1,0 +1,25 @@
+# Site-wide settings. Edit in the admin panel under "Site settings".
+name: Yemmireddy Lab
+short_name: Yemmireddy Lab
+tagline: Advancing Food Safety, Quality, and Resilient Food Systems
+description: >-
+  The Yemmireddy Lab at UTRGV studies how foodborne microorganisms survive, adapt,
+  and respond across the food supply chain, and develops practical solutions for
+  food safety, product quality, and evidence-based decision making.
+affiliation: School of Earth, Environmental, and Marine Sciences & School of Integrative Biological and Chemical Sciences
+university_name: The University of Texas Rio Grande Valley
+university_url: https://www.utrgv.edu
+pi_name: Kranti Yemmireddy, Ph.D.
+pi_title: Associate Professor – Food Safety & Food Microbiology
+departments:
+  - School of Earth, Environmental, and Marine Sciences
+  - School of Integrative Biological and Chemical Sciences
+email: veerachandra.yemmireddy@utrgv.edu
+phone: (956) 665-7198
+office: ESCNE 1.614
+address: 1201 W University Dr, Edinburg, TX 78539
+map_query: ESCNE Building, 1201 W University Dr, Edinburg, TX 78539
+google_scholar: https://scholar.google.com/citations?user=mpOZAYAAAAAJ&hl=en
+linkedin: ""
+twitter: ""
+social_image: ../../assets/images/home/hero-team.jpg

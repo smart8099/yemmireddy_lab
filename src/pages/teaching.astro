@@ -1,0 +1,209 @@
+---
+import { Image } from 'astro:assets';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import Gallery from '../components/Gallery.astro';
+import Paragraphs from '../components/Paragraphs.astro';
+import { getPage } from '../lib/site';
+
+const page = await getPage('teaching');
+const icons = [
+  // connect, engage, apply
+  'M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7',
+  'M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM23 21v-2a4 4 0 0 0-3-3.9M16 3.1a4 4 0 0 1 0 7.8',
+  'M9 11l3 3L22 4M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11',
+];
+---
+
+<BaseLayout title={page.seo_title || page.title} description={page.seo_description || page.intro}>
+  <PageHero eyebrow={page.title} title={page.subtitle} />
+
+  <section class="section">
+    <div class="container split">
+      <div>
+        <Paragraphs text={page.intro} class="lead" />
+      </div>
+      {
+        page.feature_photo && (
+          <figure class="feature">
+            <Image src={page.feature_photo.image} alt={page.feature_photo.alt} widths={[500, 800, 1100]} sizes="(min-width: 900px) 45vw, 92vw" loading="eager" />
+          </figure>
+        )
+      }
+    </div>
+  </section>
+
+  {
+    page.approach.length > 0 && (
+      <section class="section section--tint" aria-labelledby="approach">
+        <div class="container">
+          <div class="section-head section-head--center">
+            <h2 id="approach">{page.approach_title}</h2>
+          </div>
+          <div class="grid grid--3">
+            {page.approach.map((a, i) => (
+              <div class="card approach">
+                <span class="approach-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d={icons[i % icons.length]} />
+                  </svg>
+                </span>
+                <h3>{a.title}</h3>
+                <p>{a.text}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  {
+    page.courses.length > 0 && (
+      <section class="section" aria-labelledby="courses">
+        <div class="container">
+          <div class="section-head">
+            <span class="eyebrow">Courses</span>
+            <h2 id="courses">{page.courses_title}</h2>
+          </div>
+          <ul class="courses">
+            {page.courses.map((c) => (
+              <li class="course">
+                <span class="course-code">{c.code}</span>
+                <div>
+                  <h3>{c.title}</h3>
+                  {c.level && <p class="course-level">{c.level}</p>}
+                  {c.description && <p>{c.description}</p>}
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+    )
+  }
+
+  {
+    page.gallery.length > 0 && (
+      <section class="section section--tint" aria-labelledby="gallery">
+        <div class="container">
+          <div class="section-head">
+            <h2 id="gallery">{page.gallery_title}</h2>
+          </div>
+          <Gallery photos={page.gallery} />
+        </div>
+      </section>
+    )
+  }
+
+  {
+    page.mentoring_title && (
+      <section class="section" aria-labelledby="mentoring">
+        <div class="container">
+          <div class="section-head">
+            <span class="eyebrow">Mentoring</span>
+            <h2 id="mentoring">{page.mentoring_title}</h2>
+            <Paragraphs text={page.mentoring_text} class="lead" />
+          </div>
+          {page.mentoring_photos.length > 0 && <Gallery photos={page.mentoring_photos} />}
+        </div>
+      </section>
+    )
+  }
+</BaseLayout>
+
+<style>
+  .split {
+    display: grid;
+    gap: var(--space-xl);
+    align-items: center;
+  }
+
+  @media (min-width: 900px) {
+    .split {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  .feature {
+    margin: 0;
+  }
+
+  .feature img {
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-lift);
+  }
+
+  .approach {
+    text-align: center;
+  }
+
+  .approach-icon {
+    display: inline-grid;
+    place-items: center;
+    width: 3.5rem;
+    height: 3.5rem;
+    border-radius: 50%;
+    background: var(--color-accent-soft);
+    color: var(--color-accent);
+    margin-bottom: var(--space-s);
+  }
+
+  .approach p {
+    color: var(--color-muted);
+    margin: 0;
+  }
+
+  .courses {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: var(--space-m);
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr));
+  }
+
+  .course {
+    display: flex;
+    gap: var(--space-m);
+    align-items: flex-start;
+    padding: var(--space-l);
+    background: var(--color-surface);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+  }
+
+  .course-code {
+    flex-shrink: 0;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    padding: 0.35rem 0.7rem;
+    border-radius: var(--radius-s);
+    background: var(--color-primary);
+    color: #fff;
+    white-space: nowrap;
+  }
+
+  .course h3 {
+    margin-bottom: 0.2rem;
+  }
+
+  .course p {
+    margin: 0;
+    font-size: var(--step--1);
+    color: var(--color-muted);
+  }
+
+  .course-level {
+    font-weight: 600;
+  }
+
+  @media (max-width: 420px) {
+    .course {
+      flex-direction: column;
+      gap: var(--space-s);
+    }
+  }
+</style>

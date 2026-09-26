@@ -1,0 +1,208 @@
+---
+import { getCollection, type CollectionEntry } from 'astro:content';
+import { Image } from 'astro:assets';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Paragraphs from '../../components/Paragraphs.astro';
+import { getSettings, mailto, url } from '../../lib/site';
+
+export async function getStaticPaths() {
+  const people = await getCollection('people');
+  return people.map((person) => ({ params: { id: person.id }, props: { person } }));
+}
+
+const { person } = Astro.props as { person: CollectionEntry<'people'> };
+const p = person.data;
+const settings = await getSettings();
+const displayName = p.honorific ? `${p.name}, ${p.honorific}` : p.name;
+const summary = p.research_interests?.split(/(?<=\.)\s/)[0] ?? `${p.position} in the ${settings.name}.`;
+const links = [
+  p.email && { label: 'Email', href: mailto(p.email), text: p.email },
+  p.linkedin && { label: 'LinkedIn', href: p.linkedin, text: 'LinkedIn profile' },
+  p.google_scholar && { label: 'Google Scholar', href: p.google_scholar, text: 'Google Scholar' },
+  p.website && { label: 'Website', href: p.website, text: 'Website' },
+].filter(Boolean) as { label: string; href: string; text: string }[];
+
+const jsonLd = {
+  '@type': 'Person',
+  name: p.name,
+  honorificSuffix: p.honorific,
+  jobTitle: p.position.split('\n')[0],
+  email: p.email,
+  url: new URL(Astro.url.pathname, Astro.site).href,
+  sameAs: [p.linkedin, p.google_scholar, p.website].filter(Boolean),
+  worksFor: { '@type': 'ResearchOrganization', name: settings.name },
+  affiliation: { '@type': 'CollegeOrUniversity', name: settings.university_name },
+};
+---
+
+<BaseLayout title={displayName} description={summary} image={p.photo} imageAlt={`Photo of ${p.name}`} type="profile" jsonLd={jsonLd}>
+  <article class="profile">
+    <div class="container profile-grid">
+      <aside class="profile-aside">
+        {p.photo && <Image src={p.photo} alt={`Photo of ${p.name}`} widths={[300, 500, 700]} sizes="(min-width: 860px) 320px, 90vw" class="profile-photo" loading="eager" />}
+        {
+          links.length > 0 && (
+            <ul class="profile-links">
+              {links.map((l) => (
+                <li>
+                  <span>{l.label}</span>
+                  <a href={l.href}>{l.text}</a>
+                </li>
+              ))}
+            </ul>
+          )
+        }
+      </aside>
+
+      <div class="profile-main">
+        <nav aria-label="Breadcrumb" class="crumbs"><a href={url('people/')}>People</a> <span aria-hidden="true">/</span> {p.role}</nav>
+        <h1>{displayName}</h1>
+        <p class="profile-position">{p.position.split('\n').map((line) => <span>{line}</span>)}</p>
+
+        {
+          p.education.length > 0 && (
+            <section>
+              <h2>Education</h2>
+              <ul class="edu">{p.education.map((e) => <li>{e}</li>)}</ul>
+            </section>
+          )
+        }
+
+        {
+          p.research_interests && (
+            <section>
+              <h2>Research interests</h2>
+              <Paragraphs text={p.research_interests} />
+            </section>
+          )
+        }
+
+        {
+          p.current_research.length > 0 && (
+            <section>
+              <h2>Current research</h2>
+              <ul class="current">{p.current_research.map((r) => <li>{r}</li>)}</ul>
+            </section>
+          )
+        }
+
+        {
+          p.outside_the_lab && (
+            <section class="outside">
+              <h2>Outside the lab</h2>
+              <p>{p.outside_the_lab}</p>
+            </section>
+          )
+        }
+
+        <p class="back"><a href={url('people/')}>← Back to all people</a></p>
+      </div>
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  .profile {
+    padding-block: var(--space-2xl);
+  }
+
+  .profile-grid {
+    display: grid;
+    gap: var(--space-xl);
+  }
+
+  @media (min-width: 860px) {
+    .profile-grid {
+      grid-template-columns: 320px 1fr;
+      align-items: start;
+    }
+
+    .profile-aside {
+      position: sticky;
+      top: calc(var(--header-h) + 1.5rem);
+    }
+  }
+
+  .profile-photo {
+    width: 100%;
+    max-width: 360px;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    object-position: 50% 22%;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-lift);
+  }
+
+  .profile-links {
+    list-style: none;
+    padding: var(--space-m) 0 0;
+    margin: 0;
+    display: grid;
+    gap: var(--space-s);
+    font-size: var(--step--1);
+  }
+
+  .profile-links li {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .profile-links span {
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+    font-weight: 600;
+  }
+
+  .profile-links a {
+    overflow-wrap: anywhere;
+  }
+
+  .crumbs {
+    font-size: var(--step--1);
+    color: var(--color-muted);
+    margin-bottom: var(--space-s);
+  }
+
+  .profile-main h1 {
+    font-size: var(--step-3);
+  }
+
+  .profile-position {
+    display: flex;
+    flex-direction: column;
+    font-weight: 600;
+    color: var(--color-accent);
+    margin-bottom: var(--space-xl);
+  }
+
+  .profile-main section {
+    max-width: 46rem;
+    padding-top: var(--space-l);
+    border-top: 1px solid var(--color-line);
+    margin-bottom: var(--space-l);
+  }
+
+  .profile-main h2 {
+    font-size: var(--step-1);
+    font-family: var(--font-body);
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--color-primary);
+  }
+
+  .current li,
+  .edu li {
+    margin-bottom: 0.4rem;
+  }
+
+  .outside p {
+    font-style: italic;
+  }
+
+  .back {
+    margin-top: var(--space-xl);
+  }
+</style>

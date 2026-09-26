@@ -1,0 +1,200 @@
+---
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
+interface Props {
+  slides: { image: ImageMetadata; alt: string; caption?: string }[];
+  interval?: number;
+}
+const { slides, interval = 6000 } = Astro.props;
+---
+
+<div class="carousel" data-interval={interval} aria-roledescription="carousel" aria-label="Lab photos">
+  <div class="carousel-track">
+    {
+      slides.map((s, i) => (
+        <figure class:list={['carousel-slide', { 'is-active': i === 0 }]} aria-roledescription="slide" aria-label={`${i + 1} of ${slides.length}`} aria-hidden={i === 0 ? undefined : 'true'}>
+          <Image
+            src={s.image}
+            alt={s.alt}
+            widths={[640, 960, 1280, 1600, 2000]}
+            sizes="(min-width: 960px) 60vw, 100vw"
+            quality={72}
+            loading={i === 0 ? 'eager' : 'lazy'}
+            fetchpriority={i === 0 ? 'high' : undefined}
+          />
+          {s.caption && <figcaption>{s.caption}</figcaption>}
+        </figure>
+      ))
+    }
+  </div>
+  {
+    slides.length > 1 && (
+      <div class="carousel-controls">
+        <button type="button" class="carousel-pause" aria-label="Pause slideshow" data-paused="false">
+          <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path class="i-pause" d="M7 5h3v14H7zM14 5h3v14h-3z" fill="currentColor" /><path class="i-play" d="M8 5l11 7-11 7z" fill="currentColor" /></svg>
+        </button>
+        {slides.map((_, i) => (
+          <button type="button" class="carousel-dot" aria-label={`Show photo ${i + 1}`} aria-current={i === 0 ? 'true' : undefined} data-index={i} />
+        ))}
+      </div>
+    )
+  }
+</div>
+
+<script>
+  document.querySelectorAll<HTMLElement>('.carousel').forEach((root) => {
+    const slides = [...root.querySelectorAll<HTMLElement>('.carousel-slide')];
+    const dots = [...root.querySelectorAll<HTMLButtonElement>('.carousel-dot')];
+    const pause = root.querySelector<HTMLButtonElement>('.carousel-pause');
+    if (slides.length < 2) return;
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let index = 0;
+    let timer: number | undefined;
+    let paused = reduced;
+
+    const show = (i: number) => {
+      index = (i + slides.length) % slides.length;
+      slides.forEach((s, n) => {
+        s.classList.toggle('is-active', n === index);
+        if (n === index) s.removeAttribute('aria-hidden');
+        else s.setAttribute('aria-hidden', 'true');
+      });
+      dots.forEach((d, n) => (n === index ? d.setAttribute('aria-current', 'true') : d.removeAttribute('aria-current')));
+    };
+    const start = () => {
+      stop();
+      if (!paused) timer = window.setInterval(() => show(index + 1), Number(root.dataset.interval));
+    };
+    const stop = () => window.clearInterval(timer);
+    const setPaused = (p: boolean) => {
+      paused = p;
+      pause?.setAttribute('data-paused', String(p));
+      pause?.setAttribute('aria-label', p ? 'Play slideshow' : 'Pause slideshow');
+      start();
+    };
+
+    dots.forEach((d) => d.addEventListener('click', () => { show(Number(d.dataset.index)); start(); }));
+    pause?.addEventListener('click', () => setPaused(!paused));
+    root.addEventListener('mouseenter', stop);
+    root.addEventListener('mouseleave', start);
+    root.addEventListener('focusin', stop);
+    root.addEventListener('focusout', start);
+    document.addEventListener('visibilitychange', () => (document.hidden ? stop() : start()));
+    setPaused(paused);
+  });
+</script>
+
+<style>
+  .carousel {
+    position: relative;
+    height: 100%;
+    min-height: inherit;
+    overflow: hidden;
+    background: var(--color-primary-strong);
+  }
+
+  .carousel-track,
+  .carousel-slide {
+    position: absolute;
+    inset: 0;
+    margin: 0;
+  }
+
+  .carousel-slide {
+    opacity: 0;
+    transition: opacity 1.2s ease;
+  }
+
+  .carousel-slide.is-active {
+    opacity: 1;
+  }
+
+  .carousel-slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .carousel-slide.is-active img {
+    animation: kenburns 9s ease-out both;
+  }
+
+  @keyframes kenburns {
+    from { transform: scale(1.06); }
+    to { transform: scale(1); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .carousel-slide { transition: none; }
+    .carousel-slide.is-active img { animation: none; }
+  }
+
+  .carousel-slide figcaption {
+    position: absolute;
+    right: 1rem;
+    bottom: 3.5rem;
+    background: rgb(0 0 0 / 0.55);
+    color: #fff;
+    font-size: 0.8rem;
+    padding: 0.3rem 0.7rem;
+    border-radius: 999px;
+  }
+
+  .carousel-controls {
+    position: absolute;
+    left: 50%;
+    bottom: 1rem;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.2rem 0.6rem;
+    border-radius: 999px;
+    background: rgb(0 0 0 / 0.35);
+    z-index: 3;
+  }
+
+  /* 24px tap target with a small visual dot inside */
+  .carousel-dot {
+    display: grid;
+    place-items: center;
+    min-width: 1.5rem;
+    height: 1.5rem;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+  }
+
+  .carousel-dot::before {
+    content: '';
+    width: 0.65rem;
+    height: 0.65rem;
+    border-radius: 999px;
+    border: 2px solid #fff;
+    transition: width 0.25s, background 0.25s;
+  }
+
+  .carousel-dot[aria-current='true']::before {
+    width: 1.6rem;
+    background: #fff;
+  }
+
+  .carousel-pause {
+    display: grid;
+    place-items: center;
+    width: 1.75rem;
+    height: 1.75rem;
+    padding: 0;
+    color: #fff;
+    background: transparent;
+    border: 0;
+    cursor: pointer;
+  }
+
+  .carousel-pause[data-paused='false'] .i-play,
+  .carousel-pause[data-paused='true'] .i-pause {
+    display: none;
+  }
+</style>

@@ -1,0 +1,133 @@
+---
+import { getSettings, mailto, nav, url } from '../lib/site';
+
+const settings = await getSettings();
+const year = new Date().getFullYear();
+const social = [
+  { label: 'Google Scholar', href: settings.google_scholar },
+  { label: 'LinkedIn', href: settings.linkedin },
+  { label: 'X / Twitter', href: settings.twitter },
+].filter((s) => s.href);
+---
+
+<footer class="site-footer">
+  <div class="container footer-grid">
+    <div class="footer-about">
+      <p class="footer-name">{settings.name}</p>
+      <p>{settings.tagline}</p>
+      <p class="footer-affil">
+        {settings.departments.map((d) => <span>{d}</span>)}
+        {settings.university_url ? <a href={settings.university_url}>{settings.university_name}</a> : <span>{settings.university_name}</span>}
+      </p>
+    </div>
+
+    <nav class="footer-links" aria-label="Footer">
+      <p class="footer-heading">Explore</p>
+      <ul>
+        {nav.slice(1).map((item) => <li><a href={url(item.href)}>{item.label}</a></li>)}
+      </ul>
+    </nav>
+
+    <address class="footer-contact">
+      <p class="footer-heading">Contact</p>
+      <p>
+        {settings.pi_name}<br />
+        {settings.office && <>{settings.office}<br /></>}
+        {settings.address}
+      </p>
+      <p>
+        <a href={mailto(settings.email)}>{settings.email}</a>
+        {settings.phone && <><br /><a href={`tel:${settings.phone.replace(/[^\d+]/g, '')}`}>{settings.phone}</a></>}
+      </p>
+      {social.length > 0 && <p class="footer-social">{social.map((s) => <a href={s.href}>{s.label}</a>)}</p>}
+    </address>
+  </div>
+  <div class="container footer-base">
+    <p>© {year} {settings.name}, {settings.university_name}</p>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    background: var(--color-primary-strong);
+    color: #c9dcd8;
+    font-size: var(--step--1);
+    padding-top: var(--space-2xl);
+  }
+
+  .site-footer a {
+    color: #fff;
+    text-decoration-color: rgb(255 255 255 / 0.35);
+  }
+
+  .site-footer a:hover {
+    color: #ffd3b8;
+  }
+
+  .footer-grid {
+    display: grid;
+    gap: var(--space-xl);
+    grid-template-columns: 1fr;
+  }
+
+  @media (min-width: 720px) {
+    .footer-grid {
+      grid-template-columns: 1.4fr 1fr 1.2fr;
+    }
+  }
+
+  .footer-name {
+    font-family: var(--font-display);
+    font-size: var(--step-2);
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: var(--space-xs);
+  }
+
+  .footer-affil {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+
+  .footer-heading {
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    color: #fff;
+    margin-bottom: var(--space-s);
+  }
+
+  .footer-links ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    columns: 2;
+    column-gap: var(--space-l);
+  }
+
+  .footer-links li {
+    margin-bottom: 0.4rem;
+  }
+
+  .footer-social {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-m);
+  }
+
+  address {
+    font-style: normal;
+  }
+
+  .footer-base {
+    border-top: 1px solid rgb(255 255 255 / 0.12);
+    margin-top: var(--space-xl);
+    padding-block: var(--space-l);
+  }
+
+  .footer-base p {
+    margin: 0;
+  }
+</style>
