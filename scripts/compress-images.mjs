@@ -14,8 +14,8 @@ import sharp from 'sharp';
 import fs from 'node:fs';
 import path from 'node:path';
 
-const MAX_EDGE = 2400; // px, longest side — plenty for full-width, high-DPI display
-const MAX_BYTES = 1024 * 1024; // files under 1 MB and within MAX_EDGE are left alone
+const MAX_EDGE = 3840; // px, longest side — 4K, so lightbox views stay sharp on large screens
+const MAX_BYTES = 3 * 1024 * 1024; // files under 3 MB and within MAX_EDGE are left alone
 const ROOT = 'src/assets/images';
 const EXT = /\.(jpe?g|png|webp)$/i;
 
@@ -41,8 +41,8 @@ for (const file of files) {
   if (longest > MAX_EDGE) img = img.resize({ width: MAX_EDGE, height: MAX_EDGE, fit: 'inside' });
   const ext = path.extname(file).toLowerCase();
   if (ext === '.png') img = img.png({ compressionLevel: 9, effort: 10 });
-  else if (ext === '.webp') img = img.webp({ quality: 82 });
-  else img = img.jpeg({ quality: 82, mozjpeg: true });
+  else if (ext === '.webp') img = img.webp({ quality: 90 });
+  else img = img.jpeg({ quality: 90, mozjpeg: true });
 
   const out = await img.toBuffer();
   if (out.length >= before) {

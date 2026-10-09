@@ -89,7 +89,7 @@ All photos live in `src/assets/images/` and are committed to the repo (admin-pan
 uploads land there too). The build generates optimised WebP copies for visitors.
 
 To keep the repo small, `.github/workflows/compress-images.yml` automatically
-shrinks any image added or changed in a push (longest side > 2400px or file > 1 MB)
+shrinks any image added or changed in a push (longest side > 3840px or file > 3 MB)
 and commits the smaller version back — same filename and format, so no content
 changes. To run it yourself on every image: `npm run images:compress`.
 
