@@ -1,18 +1,19 @@
 name: Marcos Aleman
-honorific: ""
 role: Graduate Student
 position: |-
   Graduate Student in Biochemistry and Molecular Biology
   Forensic DNA Scientist, Texas Department of Public Safety Crime Laboratory
 order: 20
-photo: ../../assets/images/people/marcos-aleman.jpg
+photo: ../../assets/images/people/marcos-aleman1.jpg
 education:
   - B.S. in Biochemistry, summa cum laude, Texas A&M University
-research_interests: Marcos is interested in applying genomic and metagenomic sequencing to food-safety investigations. His research examines whether the native microbiome of a food commodity can provide useful context for detecting or investigating pathogen contamination. This work focuses on microbial-community dynamics and pathogen persistence in fresh-cut produce.
+research_interests: Marcos is interested in applying genomic and metagenomic
+  sequencing to food-safety investigations. His research examines whether the
+  native microbiome of a food commodity can provide useful context for detecting
+  or investigating pathogen contamination. This work focuses on
+  microbial-community dynamics and pathogen persistence in fresh-cut produce.
 current_research:
-  - Investigating fresh-cut produce microbiome dynamics and pathogen persistence during cold storage.
+  - Investigating fresh-cut produce microbiome dynamics and pathogen persistence
+    during cold storage.
 outside_the_lab: Enjoys traveling, films, and weight training.
 email: mark.aleman01@utrgv.edu
-linkedin: ""
-google_scholar: ""
-website: ""
