@@ -21,6 +21,7 @@ const props = Astro.props;
     <link rel="sitemap" href={url('sitemap-index.xml')} />
     <meta name="generator" content={Astro.generator} />
     <SEO {...props} />
+    <slot name="head" />
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to content</a>

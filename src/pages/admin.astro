@@ -1,0 +1,25 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+// The admin panel is hosted by Pages CMS; this page is just a memorable
+// shortcut to it (ylab.jybeknatural.com/admin).
+const cmsUrl = 'https://app.pagescms.org/smart8099/yemmireddy_lab/main';
+---
+
+<BaseLayout title="Admin" noindex>
+  <meta slot="head" http-equiv="refresh" content={`0; url=${cmsUrl}`} />
+  <section class="section">
+    <div class="container--narrow redirect">
+      <span class="eyebrow">Admin</span>
+      <h1>Opening the admin panel…</h1>
+      <p class="lead">If nothing happens, use the button below.</p>
+      <p><a class="btn" href={cmsUrl}>Go to the admin panel</a></p>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .redirect {
+    text-align: center;
+  }
+</style>

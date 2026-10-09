@@ -14,8 +14,9 @@ click **Save**.
 3. You'll land in the admin panel with a menu on the left:
    *People, Alumni, News, Publications, Page: Home, …*
 
-Next time, go to **<https://app.pagescms.org>**, enter your email, and click the
-sign-in link it sends you. Bookmark that address — it's the only one you need.
+Next time, go to **<https://ylab.jybeknatural.com/admin>** (it takes you to the
+admin panel at app.pagescms.org), enter your email, and click the sign-in link
+it sends you. Bookmark that address — it's the only one you need.
 
 ---
 
