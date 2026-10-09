@@ -86,7 +86,6 @@ decision_cycle:
     - Better resource allocation
     - Safer food systems
   original_image:
-    image: ../../assets/images/research/evidence-to-decision.png
     alt: "Original infographic: From Evidence to Decision, a cycle of integrating
       evidence, modeling exposure, quantifying risk, comparing interventions,
       and prioritizing decisions, centered on QMRA and decision science"
