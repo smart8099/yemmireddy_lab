@@ -1,8 +1,8 @@
-seo_title: Research
-seo_description: Systems food microbiology from insight to impact — microbial ecology, intervention science, and quantitative microbial risk assessment across fresh-produce supply chains.
 title: Research
 subtitle: Systems Food Microbiology — from Insight to Impact
-intro: We study how microorganisms behave across food supply chains, which controls work under realistic conditions, and how scientific evidence can guide better food-safety decisions.
+intro: We study how microorganisms behave across food supply chains, which
+  controls work under realistic conditions, and how scientific evidence can
+  guide better food-safety decisions.
 directions: "Our research follows three connected directions: Understand. Control. Inform."
 framework_title: Our Research Framework
 framework:
@@ -24,7 +24,8 @@ framework:
       question: Where and why do foodborne pathogens survive and persist?
     - name: Control
       title: Intervention Science & Food Quality
-      question: Which controls work under realistic conditions while protecting product quality?
+      question: Which controls work under realistic conditions while protecting
+        product quality?
     - name: Inform
       title: Risk Analytics & Decision Support
       question: Which actions deliver the greatest meaningful reduction in risk?
@@ -39,7 +40,11 @@ framework:
     - Resilient food systems
   original_image:
     image: ../../assets/images/research/insight-to-impact.png
-    alt: "Original infographic: From Insight to Impact, a systems framework linking the food system to three research areas — Understand, Control, and Inform — around systems food microbiology, leading through teaching, training, and outreach to safer foods, protected quality, and resilient food systems"
+    alt: "Original infographic: From Insight to Impact, a systems framework linking
+      the food system to three research areas — Understand, Control, and Inform
+      — around systems food microbiology, leading through teaching, training,
+      and outreach to safer foods, protected quality, and resilient food
+      systems"
 decision_cycle:
   title: From Evidence to Decision
   subtitle: Quantitative microbial risk assessment as an iterative research cycle
@@ -48,15 +53,33 @@ decision_cycle:
   hub_note: Evidence → Risk → Action
   steps:
     - title: Integrate Evidence
-      details: [Laboratory, Field, Literature, Industry]
+      details:
+        - Laboratory
+        - Field
+        - Literature
+        - Industry
     - title: Model Exposure
-      details: [Contamination, Transfer, Survival, Consumption, Dose–response]
+      details:
+        - Contamination
+        - Transfer
+        - Survival
+        - Consumption
+        - Dose–response
     - title: Quantify Risk
-      details: [Probability, Variability, Uncertainty]
+      details:
+        - Probability
+        - Variability
+        - Uncertainty
     - title: Compare Interventions
-      details: [Scenarios, Sensitivity, Risk reduction]
+      details:
+        - Scenarios
+        - Sensitivity
+        - Risk reduction
     - title: Prioritize Decisions
-      details: [Critical points, Practical controls, Research needs]
+      details:
+        - Critical points
+        - Practical controls
+        - Research needs
   outcomes_label: Outcomes
   outcomes:
     - Targeted controls
@@ -64,11 +87,18 @@ decision_cycle:
     - Safer food systems
   original_image:
     image: ../../assets/images/research/evidence-to-decision.png
-    alt: "Original infographic: From Evidence to Decision, a cycle of integrating evidence, modeling exposure, quantifying risk, comparing interventions, and prioritizing decisions, centered on QMRA and decision science"
+    alt: "Original infographic: From Evidence to Decision, a cycle of integrating
+      evidence, modeling exposure, quantifying risk, comparing interventions,
+      and prioritizing decisions, centered on QMRA and decision science"
 pillars:
   - label: 01 | Understand
     title: Microbial Ecology & Pathogen Persistence
-    summary: We study how foodborne pathogens and resident microbial communities change across fresh-produce supply chains. Through field sampling, laboratory studies, and microbiome and metagenomic analyses, we identify environmental and operational conditions that influence contamination, survival, and persistence.
+    summary: We study how foodborne pathogens and resident microbial communities
+      change across fresh-produce supply chains. Through field sampling,
+      laboratory studies, and microbiome and metagenomic analyses, we identify
+      environmental and operational conditions that influence contamination,
+      survival, and persistence.
+    show_decision_cycle: false
     photos:
       - image: ../../assets/images/research/understand-1.jpg
         alt: Rows of onions growing in a field
@@ -82,7 +112,11 @@ pillars:
         alt: Student pipetting samples inside a biosafety cabinet
   - label: 02 | Control
     title: Intervention Science & Quality Protection
-    summary: We investigate how microbial stress, surface attachment, and biofilm formation affect pathogen response to control measures. We evaluate sanitizers and emerging technologies for their ability to reduce microbial risk while protecting product quality and shelf life.
+    summary: We investigate how microbial stress, surface attachment, and biofilm
+      formation affect pathogen response to control measures. We evaluate
+      sanitizers and emerging technologies for their ability to reduce microbial
+      risk while protecting product quality and shelf life.
+    show_decision_cycle: false
     photos:
       - image: ../../assets/images/research/control-1.jpg
         alt: Researcher treating trays of fresh-cut produce in a biosafety cabinet
@@ -98,10 +132,18 @@ pillars:
         alt: Student operating an analytical instrument
   - label: 03 | Inform
     title: Quantitative Risk Assessment & Decision Science
-    summary: We use quantitative microbial risk assessment (QMRA) to connect laboratory, field, and supply-chain data. These models help us estimate risk, compare intervention strategies, identify critical knowledge gaps, and determine where food-safety actions can have the greatest impact.
-    show_decision_cycle: true
+    summary: We use quantitative microbial risk assessment (QMRA) to connect
+      laboratory, field, and supply-chain data. These models help us estimate
+      risk, compare intervention strategies, identify critical knowledge gaps,
+      and determine where food-safety actions can have the greatest impact.
+    show_decision_cycle: false
     photos:
       - image: ../../assets/images/research/inform-1.jpg
         alt: Lab members discussing research findings at a scientific poster session
 closing_title: One Integrated Research Program
-closing_text: Understand microbial behavior. Develop effective controls. Inform better decisions.
+closing_text: Understand microbial behavior. Develop effective controls. Inform
+  better decisions.
+seo_title: Research
+seo_description: Systems food microbiology from insight to impact — microbial
+  ecology, intervention science, and quantitative microbial risk assessment
+  across fresh-produce supply chains.
