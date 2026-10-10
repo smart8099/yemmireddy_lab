@@ -1,19 +1,23 @@
-seo_title: Teaching
-seo_description: Courses in microbiology, food science, and nanotechnology for food and agriculture, taught with an emphasis on active learning, evidence-based reasoning, and scientific communication.
 title: Teaching
 subtitle: Learning Science by Applying It
-intro: I design courses that help students move from understanding foundational concepts to applying them to meaningful problems in microbiology, food safety, and food systems. My teaching emphasizes active participation, evidence-based reasoning, collaborative problem-solving, and clear scientific communication.
+intro: I design courses that help students move from understanding foundational
+  concepts to applying them to meaningful problems in microbiology, food safety,
+  and food systems. My teaching emphasizes active participation, evidence-based
+  reasoning, collaborative problem-solving, and clear scientific communication.
 feature_photo:
   image: ../../assets/images/teaching/classroom-1.jpg
   alt: Students seated in a large lecture hall during class
 approach_title: My Teaching Approach
 approach:
   - title: Connect
-    text: Relate scientific concepts to current cases, practical applications, and career-relevant challenges.
+    text: Relate scientific concepts to current cases, practical applications, and
+      career-relevant challenges.
   - title: Engage
-    text: Involve students through discussion, inquiry, laboratory experiences, and collaborative problem-solving.
+    text: Involve students through discussion, inquiry, laboratory experiences, and
+      collaborative problem-solving.
   - title: Apply
-    text: Prepare students to analyze evidence, make informed decisions, and communicate scientific conclusions effectively.
+    text: Prepare students to analyze evidence, make informed decisions, and
+      communicate scientific conclusions effectively.
 courses_title: Courses Taught Regularly
 courses:
   - code: BIOL 3401
@@ -31,13 +35,19 @@ courses:
 gallery_title: Learning in Action
 gallery:
   - image: ../../assets/images/teaching/classroom-2.jpg
-    alt: Students in a classroom watching a lecture with remote participants on screen
+    alt: Students in a classroom watching a lecture with remote participants on
+      screen
   - image: ../../assets/images/teaching/classroom-3.jpg
     alt: A large group of students on a guided visit
   - image: ../../assets/images/teaching/classroom-4.jpg
-    alt: Students seated at lab benches during a class session
+    alt: High school teachers attending a workshop where students presenting their
+      work
 mentoring_title: Mentoring Beyond the Classroom
-mentoring_text: I mentor undergraduate and graduate students through laboratory research, collaborative projects, scientific presentations, and manuscript development. These experiences help students strengthen their technical abilities, scientific judgment, communication skills, and professional confidence.
+mentoring_text: I mentor undergraduate and graduate students through laboratory
+  research, collaborative projects, scientific presentations, and manuscript
+  development. These experiences help students strengthen their technical
+  abilities, scientific judgment, communication skills, and professional
+  confidence.
 mentoring_photos:
   - image: ../../assets/images/teaching/mentoring-1.jpg
     alt: Students in lab coats working together at a lab bench
@@ -47,3 +57,7 @@ mentoring_photos:
     alt: Researchers collecting leafy green samples in the field
   - image: ../../assets/images/teaching/mentoring-4.jpg
     alt: Two researchers running water-quality tests at an outdoor station
+seo_title: Teaching
+seo_description: Courses in microbiology, food science, and nanotechnology for
+  food and agriculture, taught with an emphasis on active learning,
+  evidence-based reasoning, and scientific communication.
