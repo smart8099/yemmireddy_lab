@@ -22,6 +22,13 @@ const photo = ({ image }: SchemaContext) =>
     caption: text(),
   });
 
+/** An optional single photo; clearing its image in the CMS hides it even if the description is left behind. */
+const optionalPhoto = (ctx: SchemaContext) =>
+  z.preprocess(
+    (v) => (v && typeof v === 'object' && !blankToUndefined((v as { image?: unknown }).image) ? undefined : blankToUndefined(v)),
+    photo(ctx).optional(),
+  );
+
 /** One YAML file per page, e.g. src/content/pages/home.yml -> id "home". */
 const page = <S extends z.ZodType>(id: string, schema: (ctx: SchemaContext) => S) =>
   defineCollection({ loader: glob({ pattern: `${id}.yml`, base: './src/content/pages' }), schema });
@@ -82,7 +89,7 @@ export const collections = {
               }),
             ),
             explore_label: text(),
-            original_image: z.preprocess(blankToUndefined, photo(ctx).optional()),
+            original_image: optionalPhoto(ctx),
           })
           .optional(),
       ),
@@ -116,7 +123,7 @@ export const collections = {
             practice: list(z.string()),
             impact_title: text(),
             impact: list(z.string()),
-            original_image: z.preprocess(blankToUndefined, photo(ctx).optional()),
+            original_image: optionalPhoto(ctx),
           })
           .optional(),
       ),
@@ -132,7 +139,7 @@ export const collections = {
             steps: list(z.object({ title: z.string(), details: list(z.string()) })),
             outcomes_label: text(),
             outcomes: list(z.string()),
-            original_image: z.preprocess(blankToUndefined, photo(ctx).optional()),
+            original_image: optionalPhoto(ctx),
           })
           .optional(),
       ),
@@ -156,7 +163,7 @@ export const collections = {
       title: z.string(),
       subtitle: z.string(),
       intro: z.string(),
-      feature_photo: z.preprocess(blankToUndefined, photo(ctx).optional()),
+      feature_photo: optionalPhoto(ctx),
       approach_title: text(),
       approach: list(z.object({ title: z.string(), text: z.string() })),
       courses_title: text(),
@@ -175,7 +182,7 @@ export const collections = {
       title: z.string(),
       subtitle: z.string(),
       intro: text(),
-      feature_photo: z.preprocess(blankToUndefined, photo(ctx).optional()),
+      feature_photo: optionalPhoto(ctx),
       highlights: list(z.object({ title: z.string(), text: z.string() })),
       gallery_title: text(),
       gallery: list(photo(ctx)),
