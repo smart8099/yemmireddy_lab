@@ -1,5 +1,5 @@
 ---
-title: Welcome to the new Yemmireddy Lab website
+title: Welcome to the Yemmireddy Lab website
 date: 2026-09-26
 summary: Our new website brings together the lab's research, team, teaching, and
   outreach in one place.
