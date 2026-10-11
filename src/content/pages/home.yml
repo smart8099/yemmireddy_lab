@@ -1,26 +1,30 @@
-seo_title: ""
-seo_description: ""
 hero_title: Yemmireddy Lab
 hero_subtitle: Advancing Food Safety, Quality, and Resilient Food Systems
 carousel:
   - image: ../../assets/images/home/hero-team.jpg
     alt: Members of the Yemmireddy Lab standing together on the UTRGV campus
-    caption: ""
   - image: ../../assets/images/home/hero-lab-coats.jpg
     alt: Four lab members in lab coats standing in the laboratory
-    caption: ""
   - image: ../../assets/images/home/hero-field-sampling.jpg
     alt: Researchers collecting produce samples in a field
-    caption: ""
   - image: ../../assets/images/home/hero-lab-work.jpg
     alt: Lab members working at benches in the food microbiology laboratory
-    caption: ""
-intro: |-
-  The Yemmireddy Lab investigates how foodborne microorganisms survive, adapt, and respond to environmental stresses, intervention technologies, and ecological interactions across the food supply chain. By integrating food microbiology, microbial ecology, postharvest quality, intervention science, and risk analysis, we develop practical solutions that enhance food safety, preserve product quality, and support evidence-based decision making for industry, regulators, and communities.
+intro: >-
+  Located in the Rio Grande Valley, at the heart of the U.S.–Mexico
+  fresh-produce corridor, the Yemmireddy Lab investigates how foodborne
+  microorganisms survive, adapt, and persist across food supply chains. We
+  integrate food microbiology, microbial ecology, postharvest quality,
+  intervention science, and quantitative risk assessment to develop practical
+  solutions that reduce risk, protect product quality, and support
+  evidence-based decisions.
 
-  Through research, education, and outreach, we translate scientific discoveries into real-world practices that strengthen food systems and prepare the next generation of food safety professionals.
+
+  Through research, training, and outreach, we translate scientific discoveries
+  into industry-relevant practices and prepare the next generation of
+  food-safety professionals.
 mission_title: Our Mission
-mission: Understand microbial behavior. Develop effective controls. Inform better decisions.
+mission: To understand microbial behavior in food systems, develop effective
+  controls, and inform better food-safety decisions.
 discovery:
   eyebrow: Yemmireddy Lab
   title: From Discovery to Impact
@@ -28,19 +32,36 @@ discovery:
   stages:
     - name: Understand
       icon: understand
-      points: [Microbial Ecology, Pathogen Persistence, Food Quality]
+      points:
+        - Microbial Ecology
+        - Pathogen Persistence
+        - Food Quality
     - name: Control
       icon: control
-      points: [Interventions, Quality Preservation, Risk Reduction]
+      points:
+        - Interventions
+        - Quality Preservation
+        - Risk Reduction
     - name: Inform
       icon: inform
-      points: [Risk Analytics, Decision Support, Evidence-Based Solutions]
+      points:
+        - Risk Analytics
+        - Decision Support
+        - Evidence-Based Solutions
     - name: Empower
       icon: empower
-      points: [Education, Training, Outreach & Engagement]
+      points:
+        - Education
+        - Training
+        - Outreach & Engagement
     - name: Impact
       icon: impact
-      points: [Safer Foods, Protected Quality, Resilient Food Systems]
+      points:
+        - Safer Foods
+        - Protected Quality
+        - Resilient Food Systems
   explore_label: Explore the lab
 join_title: Join the Lab
-join_text: We welcome motivated undergraduate and graduate students interested in food microbiology, food safety, and risk analysis. Reach out to learn about current opportunities.
+join_text: We welcome motivated undergraduate and graduate students interested
+  in food microbiology, food safety, and risk analysis. Reach out to learn about
+  current opportunities.
