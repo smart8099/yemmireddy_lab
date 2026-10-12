@@ -28,7 +28,8 @@ jobs:
       - id: pages
         uses: actions/configure-pages@v5
       - run: npm ci
-      - run: npm run build
+      # --force re-checks every entry, so a photo deleted in the CMS is always noticed
+      - run: npm run build -- --force
         env:
           # e.g. https://<user>.github.io + /<repo>, or your custom domain + /
           SITE_URL: ${{ steps.pages.outputs.origin }}

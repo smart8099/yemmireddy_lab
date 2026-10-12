@@ -26,10 +26,14 @@ const jsonLd = {
 ---
 
 <BaseLayout title={home.seo_title || undefined} description={home.seo_description || undefined} jsonLd={jsonLd}>
-  <section class="hero">
-    <div class="hero-media">
-      <Carousel slides={home.carousel} />
-    </div>
+  <section class:list={['hero', { 'hero--text-only': home.carousel.length === 0 }]}>
+    {
+      home.carousel.length > 0 && (
+        <div class="hero-media">
+          <Carousel slides={home.carousel} />
+        </div>
+      )
+    }
     <div class="hero-text">
       <span class="eyebrow">{settings.university_name}</span>
       <h1>{home.hero_title}</h1>
@@ -166,6 +170,11 @@ const jsonLd = {
     .hero {
       grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
       min-height: min(78vh, 720px);
+    }
+
+    .hero--text-only {
+      grid-template-columns: minmax(0, 1fr);
+      min-height: 0;
     }
 
     .hero-media {
