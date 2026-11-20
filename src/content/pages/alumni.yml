@@ -24,17 +24,34 @@ graduate:
     degree: MS in Ag, Env, & Sustainability Sciences, 2021
     current_position: Pursuing PhD in Food Science at Purdue University
 undergraduate:
-  - { name: Sunakhi Sahoo, program: MSA student }
-  - { name: Stacie Durrazzo, program: BS in Biology }
-  - { name: Mikela Mainit, program: MSA student }
-  - { name: Christine Teju, program: MSA student }
-  - { name: Jared Luikham, program: MSA student }
-  - { name: Agustin Hernandez, program: MSA student }
-  - { name: Arianna Hernandez, program: BS in Sustainable Agriculture and Food Systems }
-  - { name: Alvia Shaju, program: MSA student }
-  - { name: Colin Shiby, program: MSA student }
-  - { name: Alfia Bilal, program: MSA student }
-  - { name: Catherine Clark, program: BS in Chemistry }
-  - { name: Joel Flores, program: BS in Biology }
-  - { name: Luis Saenz, program: BS in Chemistry }
-  - { name: Nora Sustaita, program: BS in Biology }
+  - name: Alejandro Paras
+    program: "BS in Biology "
+  - name: Sunakhi Sahoo
+    program: MSA student
+  - name: Stacie Durrazzo
+    program: BS in Biology
+  - name: Mikela Mainit
+    program: MSA student
+  - name: Christine Teju
+    program: MSA student
+  - name: Jared Luikham
+    program: MSA student
+  - name: Agustin Hernandez
+    program: MSA student
+  - name: Arianna Hernandez
+    program: BS in Sustainable Agriculture and Food Systems
+  - name: Alvia Shaju
+    program: MSA student
+  - name: Colin Shiby
+    program: MSA student
+  - name: Alfia Bilal
+    program: MSA student
+  - name: Catherine Clark
+    program: BS in Chemistry
+  - name: Joel Flores
+    program: BS in Biology
+  - name: Luis Saenz
+    program: BS in Chemistry
+  - name: Nora Sustaita
+    program: BS in Biology
+  - {}
