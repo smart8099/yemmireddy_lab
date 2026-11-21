@@ -14,8 +14,12 @@ import path from 'node:path';
 // The CMS may save empty optional fields as "" or null; treat those as absent.
 const blankToUndefined = (v: unknown) => (v === '' || v === null ? undefined : v);
 const text = () => z.preprocess(blankToUndefined, z.string().trim().optional());
+/** True for a row the CMS saved with nothing filled in, e.g. `- {}` after "Add item" + save. */
+const isBlankRow = (v: unknown): boolean =>
+  blankToUndefined(v) === undefined ||
+  (typeof v === 'object' && !Array.isArray(v) && Object.values(v as object).every(isBlankRow));
 const list = <T extends z.ZodType>(item: T) =>
-  z.preprocess((v) => (v == null ? [] : v), z.array(item));
+  z.preprocess((v) => (Array.isArray(v) ? v.filter((row) => !isBlankRow(row)) : v == null ? [] : v), z.array(item));
 
 // Image paths are relative to the content file, and every content file sits
 // two folders below src/ (src/content/<type>/<file>).
