@@ -6,5 +6,6 @@ summary: >+
   Conditioning Modulates Phenolic Antimicrobial Responses in Salmonella
   Typhimurium and Listeria innocua,” in the Journal of Food Safety.
 
+cover: ../../assets/images/screenshot-2026-11-25-at-32330-pm.png
 draft: false
 ---
